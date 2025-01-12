@@ -1,6 +1,8 @@
 package com.kairgaliyev.backendonlineshop.controller;
 
+import com.kairgaliyev.backendonlineshop.dto.ChangeRoleRequest;
 import com.kairgaliyev.backendonlineshop.dto.Response;
+import com.kairgaliyev.backendonlineshop.enums.UserRole;
 import com.kairgaliyev.backendonlineshop.service.intreface.MyUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -44,4 +46,13 @@ public class UserController {
         Response response = myUserService.getMyInfo(email);
         return ResponseEntity.status(response.getStatusCode()).body(response);
     }
+
+    @PutMapping("/changeRole/{userId}")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseEntity<Response> changeUserRole(@PathVariable("userId") String userId, @RequestBody ChangeRoleRequest request) {
+        UserRole userRole = request.getRoleEnum();
+        Response response = myUserService.changeRoleById(userId, userRole);
+        return ResponseEntity.status(response.getStatusCode()).body(response);
+    }
+
 }

@@ -3,6 +3,7 @@ package com.kairgaliyev.backendonlineshop.service.implementation;
 import com.kairgaliyev.backendonlineshop.dto.LoginRequest;
 import com.kairgaliyev.backendonlineshop.dto.Response;
 import com.kairgaliyev.backendonlineshop.dto.UserDTO;
+import com.kairgaliyev.backendonlineshop.enums.UserRole;
 import com.kairgaliyev.backendonlineshop.exception.MyException;
 import com.kairgaliyev.backendonlineshop.model.User;
 import com.kairgaliyev.backendonlineshop.repository.UserRepository;
@@ -33,12 +34,15 @@ public class UserService implements MyUserService {
     public Response register(User user) {
         Response response = new Response();
         try {
-            if (user.getRole() == null || user.getRole().isBlank()) {
-                user.setRole("USER");
+            //check if user already co not have role
+            if (user.getRole() == null || user.getRole().toString().isBlank()) {
+                user.setRole(UserRole.USER);
             }
+            //check if user already have in db
             if (userRepository.existsByEmail(user.getEmail())) {
                 throw new MyException(user.getEmail() + "Already Exists");
             }
+            //build response and userDTO
             user.setPassword(passwordEncoder.encode(user.getPassword()));
             User savedUser = userRepository.save(user);
             UserDTO userDTO = Utils.mapUserEntityToUserDTO(savedUser);
@@ -50,7 +54,6 @@ public class UserService implements MyUserService {
         } catch (Exception e) {
             response.setStatusCode(500);
             response.setMessage("Error Occurred During USer Registration " + e.getMessage());
-
         }
         return response;
     }
@@ -61,13 +64,15 @@ public class UserService implements MyUserService {
         Response response = new Response();
 
         try {
+            //check user from db and generate token
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword()));
             var user = userRepository.findByEmail(loginRequest.getEmail()).orElseThrow(() -> new MyException("user Not found"));
 
             var token = jwtUtils.generateToken(user);
+            //build response
             response.setStatusCode(200);
             response.setToken(token);
-            response.setRole(user.getRole());
+            response.setRole(user.getRole().toString());
             response.setExpirationTime("7 Days");
             response.setMessage("successful");
 
@@ -150,7 +155,6 @@ public class UserService implements MyUserService {
 
     @Override
     public Response getMyInfo(String email) {
-
         Response response = new Response();
 
         try {
@@ -166,6 +170,30 @@ public class UserService implements MyUserService {
 
         } catch (Exception e) {
 
+            response.setStatusCode(500);
+            response.setMessage("Error getting all users " + e.getMessage());
+        }
+        return response;
+    }
+
+    @Override
+    public Response changeRoleById(String userId, UserRole role) {
+        Response response = new Response();
+
+        try {
+            User user = userRepository.findById(Long.valueOf(userId)).orElseThrow(() -> new MyException("User Not Found"));
+            UserDTO userDTO = Utils.mapUserEntityToUserDTO(user);
+            user.setRole(role);
+            userRepository.save(user);
+            response.setStatusCode(200);
+            response.setMessage("successful");
+            response.setUser(userDTO);
+
+        } catch (MyException e) {
+            response.setStatusCode(404);
+            response.setMessage(e.getMessage());
+
+        } catch (Exception e) {
             response.setStatusCode(500);
             response.setMessage("Error getting all users " + e.getMessage());
         }

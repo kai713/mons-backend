@@ -12,6 +12,7 @@ public class Utils {
     private static final SecureRandom secureRandom = new SecureRandom();
 
 
+    //conformation code for order etc
     public static String generateRandomConfirmationCode(int length) {
         StringBuilder stringBuilder = new StringBuilder();
         for (int i = 0; i < length; i++) {
@@ -22,7 +23,6 @@ public class Utils {
         return stringBuilder.toString();
     }
 
-
     public static UserDTO mapUserEntityToUserDTO(User user) {
         UserDTO userDTO = new UserDTO();
 
@@ -30,7 +30,7 @@ public class Utils {
         userDTO.setName(user.getName());
         userDTO.setEmail(user.getEmail());
         userDTO.setPhoneNumber(user.getPhoneNumber());
-        userDTO.setRole(user.getRole());
+        userDTO.setRole(user.getRole().toString());
         return userDTO;
     }
 

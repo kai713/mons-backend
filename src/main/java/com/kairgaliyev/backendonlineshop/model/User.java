@@ -1,5 +1,6 @@
 package com.kairgaliyev.backendonlineshop.model;
 
+import com.kairgaliyev.backendonlineshop.enums.UserRole;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
@@ -32,11 +33,12 @@ public class User implements UserDetails {
     @NotBlank(message = "Password is required")
     private String password;
 
-    private String role;
+    @Enumerated(EnumType.STRING)
+    private UserRole role;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority(role));
+        return List.of(new SimpleGrantedAuthority(role.toString()));
     }
 
     @Override
@@ -69,7 +71,7 @@ public class User implements UserDetails {
         return true;
     }
 
-    // Boil code due to lombok dont work GETTERS AND SETTERS
+    // Boil code due to lombok don't work GETTERS AND SETTERS
 
     public Long getId() {
         return id;
@@ -103,11 +105,11 @@ public class User implements UserDetails {
         this.phoneNumber = phoneNumber;
     }
 
-    public String getRole() {
+    public UserRole getRole() {
         return role;
     }
 
-    public void setRole(String role) {
+    public void setRole(UserRole role) {
         this.role = role;
     }
 
