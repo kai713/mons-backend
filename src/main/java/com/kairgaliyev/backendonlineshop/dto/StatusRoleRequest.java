@@ -1,19 +1,20 @@
 package com.kairgaliyev.backendonlineshop.dto;
 
+import com.kairgaliyev.backendonlineshop.enums.OrderStatus;
 import com.kairgaliyev.backendonlineshop.enums.UserRole;
 
-public class ChangeRoleRequest {
+public class StatusRoleRequest {
     private String role;
 
-    public UserRole getRoleEnum() {
+    public UserRole getUserRoleEnum() {
         return UserRole.valueOf(role.toUpperCase());
     }
 
-    // Getters and Setters
-
-    public String getRole() {
-        return role;
+    public OrderStatus getOrderStatusEnum() {
+        return OrderStatus.valueOf(role.toUpperCase());
     }
+
+    // Getters and Setters
 
     public void setRole(String role) {
         this.role = role;

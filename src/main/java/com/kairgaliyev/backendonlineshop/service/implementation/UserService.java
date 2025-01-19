@@ -5,9 +5,11 @@ import com.kairgaliyev.backendonlineshop.dto.Response;
 import com.kairgaliyev.backendonlineshop.dto.UserDTO;
 import com.kairgaliyev.backendonlineshop.enums.UserRole;
 import com.kairgaliyev.backendonlineshop.exception.MyException;
+import com.kairgaliyev.backendonlineshop.model.Cart;
 import com.kairgaliyev.backendonlineshop.model.User;
+import com.kairgaliyev.backendonlineshop.repository.CartRepository;
 import com.kairgaliyev.backendonlineshop.repository.UserRepository;
-import com.kairgaliyev.backendonlineshop.service.intreface.MyUserService;
+import com.kairgaliyev.backendonlineshop.service.intreface.IUserService;
 import com.kairgaliyev.backendonlineshop.utils.JWTUtils;
 import com.kairgaliyev.backendonlineshop.utils.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +21,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class UserService implements MyUserService {
+public class UserService implements IUserService {
 
     @Autowired
     private UserRepository userRepository;
@@ -29,6 +31,8 @@ public class UserService implements MyUserService {
     private JWTUtils jwtUtils;
     @Autowired
     private AuthenticationManager authenticationManager;
+    @Autowired
+    private CartRepository cartRepository;
 
     @Override
     public Response register(User user) {
@@ -48,6 +52,12 @@ public class UserService implements MyUserService {
             UserDTO userDTO = Utils.mapUserEntityToUserDTO(savedUser);
             response.setStatusCode(200);
             response.setUser(userDTO);
+
+            //Cart part
+            Cart cart = new Cart();
+            cart.setUser(user);
+
+            cartRepository.save(cart);
         } catch (MyException e) {
             response.setStatusCode(400);
             response.setMessage(e.getMessage());
@@ -102,6 +112,36 @@ public class UserService implements MyUserService {
         } catch (Exception e) {
             response.setStatusCode(500);
             response.setMessage("Error getting all users " + e.getMessage());
+        }
+        return response;
+    }
+
+    @Override
+    public Response updateUser(String userId, UserDTO userDTO) {
+        Response response = new Response();
+
+        try {
+            User existingUser = userRepository.findById(Long.valueOf(userId))
+                    .orElseThrow(() -> new MyException("user Not found"));
+
+            //TODO create method map method in util
+            if (userDTO.getEmail() != null) existingUser.setEmail(userDTO.getEmail());
+            if (userDTO.getPhoneNumber() != null) existingUser.setPhoneNumber(userDTO.getPhoneNumber());
+            if (userDTO.getName() != null) existingUser.setName(userDTO.getName());
+            if (userDTO.getRole() != null) existingUser.setRole(userDTO.getRole());
+
+            if (userDTO.getPassword() != null && !userDTO.getPassword().isEmpty()) {
+                existingUser.setPassword(passwordEncoder.encode(userDTO.getPassword()));
+            }
+            userRepository.save(existingUser);
+
+        } catch (MyException e) {
+            response.setStatusCode(404);
+            response.setMessage(e.getMessage());
+
+        } catch (Exception e) {
+            response.setStatusCode(500);
+            response.setMessage("Error updating user" + e.getMessage());
         }
         return response;
     }
@@ -195,7 +235,31 @@ public class UserService implements MyUserService {
 
         } catch (Exception e) {
             response.setStatusCode(500);
-            response.setMessage("Error getting all users " + e.getMessage());
+            response.setMessage("Error change role user " + e.getMessage());
+        }
+        return response;
+    }
+
+    @Override
+    public Response getUserOrders(String userId) {
+        Response response = new Response();
+
+        try {
+            User user = userRepository.findById(Long.valueOf(userId)).orElseThrow(() -> new MyException("User Not Found"));
+            response.setStatusCode(200);
+
+            response.setMessage("successful");
+
+            response.setOrderList(Utils.mapOrderListEntityToOrderListDTO(user.getOrders()));
+
+        } catch (MyException e) {
+            response.setStatusCode(404);
+            response.setMessage("error fetching user orders, user id " + userId + "e.getMessage: " + e.getMessage());
+
+        } catch (Exception e) {
+            response.setStatusCode(500);
+            response.setMessage("error fetching user orders, user id " + userId + "e.getMessage: " + e.getMessage());
+
         }
         return response;
     }

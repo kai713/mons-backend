@@ -3,18 +3,23 @@ package com.kairgaliyev.backendonlineshop.model;
 import com.kairgaliyev.backendonlineshop.enums.UserRole;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
-import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-@Data
 @Entity
 @Table(name = "users")
 public class User implements UserDetails {
+
+    @PrePersist
+    protected void onCreate() {
+        this.createdAt = LocalDateTime.now();
+    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -35,6 +40,17 @@ public class User implements UserDetails {
 
     @Enumerated(EnumType.STRING)
     private UserRole role;
+
+    @Column(name = "created_at")
+    private LocalDateTime createdAt;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Order> orders = new ArrayList<>();
+
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Cart cart;
+
+    // User details attributes
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -73,6 +89,7 @@ public class User implements UserDetails {
 
     // Boil code due to lombok don't work GETTERS AND SETTERS
 
+
     public Long getId() {
         return id;
     }
@@ -81,28 +98,32 @@ public class User implements UserDetails {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getEmail() {
+    public @NotBlank(message = "Email is required") String getEmail() {
         return email;
     }
 
-    public void setEmail(String email) {
+    public void setEmail(@NotBlank(message = "Email is required") String email) {
         this.email = email;
     }
 
-    public String getPhoneNumber() {
+    public @NotBlank(message = "Name is required") String getName() {
+        return name;
+    }
+
+    public void setName(@NotBlank(message = "Name is required") String name) {
+        this.name = name;
+    }
+
+    public @NotBlank(message = "Phone Number is required") String getPhoneNumber() {
         return phoneNumber;
     }
 
-    public void setPhoneNumber(String phoneNumber) {
+    public void setPhoneNumber(@NotBlank(message = "Phone Number is required") String phoneNumber) {
         this.phoneNumber = phoneNumber;
+    }
+
+    public void setPassword(@NotBlank(message = "Password is required") String password) {
+        this.password = password;
     }
 
     public UserRole getRole() {
@@ -113,7 +134,15 @@ public class User implements UserDetails {
         this.role = role;
     }
 
-    public void setPassword(@NotBlank(message = "Password is required") String password) {
-        this.password = password;
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public List<Order> getOrders() {
+        return orders;
+    }
+
+    public void setOrders(List<Order> orders) {
+        this.orders = orders;
     }
 }
