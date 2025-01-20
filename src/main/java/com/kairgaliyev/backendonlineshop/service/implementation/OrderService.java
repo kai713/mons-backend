@@ -68,7 +68,7 @@ public class OrderService implements IOrderService {
 
             order.setOrderItems(orderItems);
 
-            cartService.clearCart(userId); // Очистка корзины после оформления заказа
+            cartService.clearCart(userId);
 
             Order order1 = orderRepository.save(order);
 

@@ -1,5 +1,6 @@
 package com.kairgaliyev.backendonlineshop.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.kairgaliyev.backendonlineshop.enums.UserRole;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
@@ -44,6 +45,7 @@ public class User implements UserDetails {
     @Column(name = "created_at")
     private LocalDateTime createdAt;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Order> orders = new ArrayList<>();
 

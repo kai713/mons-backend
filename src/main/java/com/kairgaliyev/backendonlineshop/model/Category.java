@@ -5,7 +5,7 @@ import jakarta.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
-@Table(name = "Category")
+@Table(name = "category")
 @Entity
 public class Category {
     @Id

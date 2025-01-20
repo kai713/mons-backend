@@ -1,6 +1,5 @@
 package com.kairgaliyev.backendonlineshop.dto;
 
-import com.kairgaliyev.backendonlineshop.model.Category;
 import jakarta.validation.constraints.Positive;
 import lombok.Data;
 
@@ -14,7 +13,7 @@ public class ProductDTO {
     private Double price;
     private Integer stock;
 
-    private Category category;
+    private Long categoryId;
 
     //Boil code
 
@@ -50,12 +49,12 @@ public class ProductDTO {
         this.price = price;
     }
 
-    public Category getCategory() {
-        return category;
+    public Long getCategoryId() {
+        return categoryId;
     }
 
-    public void setCategory(Category category) {
-        this.category = category;
+    public void setCategoryId(Long categoryId) {
+        this.categoryId = categoryId;
     }
 
     public Integer getStock() {

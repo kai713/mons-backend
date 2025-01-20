@@ -5,9 +5,9 @@ import com.kairgaliyev.backendonlineshop.exception.MyException;
 import com.kairgaliyev.backendonlineshop.model.Cart;
 import com.kairgaliyev.backendonlineshop.model.CartItem;
 import com.kairgaliyev.backendonlineshop.model.Product;
+import com.kairgaliyev.backendonlineshop.repository.CartItemRepository;
 import com.kairgaliyev.backendonlineshop.repository.CartRepository;
 import com.kairgaliyev.backendonlineshop.repository.ProductRepository;
-import com.kairgaliyev.backendonlineshop.repository.UserRepository;
 import com.kairgaliyev.backendonlineshop.service.intreface.ICartService;
 import com.kairgaliyev.backendonlineshop.utils.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,9 +21,7 @@ public class CartService implements ICartService {
     @Autowired
     private ProductRepository productRepository;
     @Autowired
-    private UserService userService;
-    @Autowired
-    private UserRepository userRepository;
+    private CartItemRepository cartItemRepository;
 
     // Получение корзины пользователя
     public Response getCartById(Long userId) {
@@ -51,7 +49,7 @@ public class CartService implements ICartService {
         Response response = new Response();
 
         try {
-            //Do not need due to userId will given by securityContext ???
+            //Do not need due to userId will give by securityContext ???
             Cart cart = cartRepository.findByUserId(userId)
                     .orElseThrow(() -> new MyException("Cart not found"));
 
@@ -65,12 +63,14 @@ public class CartService implements ICartService {
 
             if (cartItem != null) {
                 cartItem.setQuantity(cartItem.getQuantity() + quantity);
+                cartItemRepository.save(cartItem);
             } else {
                 cartItem = new CartItem(cart, product, quantity);
+                cartItemRepository.save(cartItem);
                 cart.getCartItems().add(cartItem);
             }
 
-            cartRepository.save(cart);
+//            cartRepository.save(cart);
 
             response.setStatusCode(200);
             response.setMessage("successful");

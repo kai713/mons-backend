@@ -12,4 +12,6 @@ public interface ICategoryService {
     Response createCategory(Category category);
 
     Response deleteCategory(Long id);
+
+    Response addProductToCategory(Long productId, Long categoryId);
 }

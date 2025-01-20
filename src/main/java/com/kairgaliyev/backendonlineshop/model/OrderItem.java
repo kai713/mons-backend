@@ -2,7 +2,7 @@ package com.kairgaliyev.backendonlineshop.model;
 
 import jakarta.persistence.*;
 
-@Table(name = "OrderItem")
+@Table(name = "orderItem")
 @Entity
 public class OrderItem {
     @Id

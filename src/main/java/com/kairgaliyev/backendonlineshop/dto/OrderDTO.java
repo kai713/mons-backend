@@ -1,13 +1,11 @@
 package com.kairgaliyev.backendonlineshop.dto;
 
 import com.kairgaliyev.backendonlineshop.enums.OrderStatus;
-import com.kairgaliyev.backendonlineshop.model.OrderItem;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import lombok.Data;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -20,8 +18,11 @@ public class OrderDTO {
 
     private LocalDateTime updatedAt;
 
-    private String userId;
-    List<OrderItem> orderItems = new ArrayList<>();
+    private Long userId;
+
+    private List<OrderItemDTO> orderItems;
+
+    private LocalDateTime createdAt;
 
     //Boil code
 
@@ -49,19 +50,27 @@ public class OrderDTO {
         this.updatedAt = updatedAt;
     }
 
-    public String getUserId() {
+    public Long getUserId() {
         return userId;
     }
 
-    public void setUserId(String userId) {
+    public void setUserId(Long userId) {
         this.userId = userId;
     }
 
-    public List<OrderItem> getOrderItems() {
+    public List<OrderItemDTO> getOrderItems() {
         return orderItems;
     }
 
-    public void setOrderItems(List<OrderItem> orderItems) {
+    public void setOrderItems(List<OrderItemDTO> orderItems) {
         this.orderItems = orderItems;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
     }
 }
