@@ -1,5 +1,6 @@
 package com.kairgaliyev.backendonlineshop.service.implementation;
 
+import com.kairgaliyev.backendonlineshop.dto.CartDTO;
 import com.kairgaliyev.backendonlineshop.dto.Response;
 import com.kairgaliyev.backendonlineshop.exception.MyException;
 import com.kairgaliyev.backendonlineshop.model.Cart;
@@ -11,7 +12,10 @@ import com.kairgaliyev.backendonlineshop.repository.ProductRepository;
 import com.kairgaliyev.backendonlineshop.service.intreface.ICartService;
 import com.kairgaliyev.backendonlineshop.utils.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
+
+import java.time.Duration;
 
 @Service
 public class CartService implements ICartService {
@@ -22,20 +26,31 @@ public class CartService implements ICartService {
     private ProductRepository productRepository;
     @Autowired
     private CartItemRepository cartItemRepository;
+    @Autowired
+    private RedisTemplate<String, Object> redisTemplate;
 
-    // Получение корзины пользователя
+    private static final String CART_CACHE_KEY = "cart:";
+
     public Response getCartById(Long userId) {
 
         Response response = new Response();
 
         try {
+            CartDTO cartDTO = (CartDTO) redisTemplate.opsForValue().get(CART_CACHE_KEY + userId);
+            if (cartDTO != null) {
+                response.setMessage("successful");
+                response.setStatusCode(200);
+                response.setCart(cartDTO);
+            }
             Cart cart = cartRepository.findByUserId(userId)
                     .orElseThrow(() -> new MyException("Корзина не найдена"));
+            cartDTO = Utils.mapCartEntityToCartDTO(cart);
 
-            response.setCart(Utils.mapCartEntityToCartDTO(cart));
+            redisTemplate.opsForValue().set(CART_CACHE_KEY + userId, cartDTO, Duration.ofMinutes(10));
+
+            response.setCart(cartDTO);
             response.setMessage("successful");
             response.setStatusCode(200);
-
         } catch (Exception e) {
             response.setStatusCode(404);
             response.setMessage("error get Cart by id " + e.getMessage());
@@ -70,6 +85,8 @@ public class CartService implements ICartService {
                 cart.getCartItems().add(cartItem);
             }
 
+            redisTemplate.delete(CART_CACHE_KEY + userId);
+
 //            cartRepository.save(cart);
 
             response.setStatusCode(200);
@@ -102,6 +119,8 @@ public class CartService implements ICartService {
             response.setMessage("successful");
             response.setCart(Utils.mapCartEntityToCartDTO(cart));
 
+            redisTemplate.delete(CART_CACHE_KEY + userId);
+
         } catch (MyException e) {
             response.setStatusCode(404);
             response.setMessage("error remove product in cart " + e.getMessage());
@@ -118,6 +137,8 @@ public class CartService implements ICartService {
     public void clearCart(Long userId) {
         Cart cart = cartRepository.findByUserId(userId)
                 .orElseThrow(() -> new MyException("Cart not found"));
+
+        redisTemplate.delete(CART_CACHE_KEY + userId);
 
         cart.getCartItems().clear();
         cartRepository.save(cart);
@@ -144,6 +165,9 @@ public class CartService implements ICartService {
             }
 
             cartRepository.save(cart);
+
+            redisTemplate.delete(CART_CACHE_KEY + userId);
+
             response.setStatusCode(200);
             response.setMessage("successful");
             response.setCart(Utils.mapCartEntityToCartDTO(cart));

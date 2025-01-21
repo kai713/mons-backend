@@ -15,21 +15,18 @@ public class CategoryController {
     @Autowired
     private ICategoryService categoryService;
 
-    // Получить все категории
     @GetMapping
     public ResponseEntity<Response> getAllCategories() {
         Response response = categoryService.getAllCategories();
         return ResponseEntity.status(response.getStatusCode()).body(response);
     }
 
-    // Получить категорию по ID
     @GetMapping("/{id}")
     public ResponseEntity<Response> getCategory(@PathVariable("id") Long id) {
         Response response = categoryService.getCategoryById(id);
         return ResponseEntity.status(response.getStatusCode()).body(response);
     }
 
-    // Создать категорию
     @PostMapping
     @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<Response> createCategory(@RequestBody Category category) {
@@ -37,7 +34,6 @@ public class CategoryController {
         return ResponseEntity.status(response.getStatusCode()).body(response);
     }
 
-    // Удалить категорию
     @DeleteMapping("/{id}")
     @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<Response> deleteCategory(@PathVariable Long id) {
@@ -48,10 +44,10 @@ public class CategoryController {
     @PostMapping("/addProduct")
     @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<Response> addProductCategory(
-            @RequestParam Long userId,
+            @RequestParam Long productId,
             @RequestParam Long categoryId
     ){
-        Response response = categoryService.addProductToCategory(userId, categoryId);
+        Response response = categoryService.addProductToCategory(productId, categoryId);
         return ResponseEntity.status(response.getStatusCode()).body(response);
     }
 }

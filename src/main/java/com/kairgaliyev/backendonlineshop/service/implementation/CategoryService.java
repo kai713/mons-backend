@@ -1,5 +1,6 @@
 package com.kairgaliyev.backendonlineshop.service.implementation;
 
+import com.kairgaliyev.backendonlineshop.dto.CategoryDTO;
 import com.kairgaliyev.backendonlineshop.dto.Response;
 import com.kairgaliyev.backendonlineshop.exception.MyException;
 import com.kairgaliyev.backendonlineshop.model.Category;
@@ -9,7 +10,10 @@ import com.kairgaliyev.backendonlineshop.repository.ProductRepository;
 import com.kairgaliyev.backendonlineshop.service.intreface.ICategoryService;
 import com.kairgaliyev.backendonlineshop.utils.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
+
+import java.time.Duration;
 
 @Service
 public class CategoryService implements ICategoryService {
@@ -18,6 +22,10 @@ public class CategoryService implements ICategoryService {
     private CategoryRepository categoryRepository;
     @Autowired
     private ProductRepository productRepository;
+    @Autowired
+    private RedisTemplate<String, Object> redisTemplate;
+
+    private static final String CATEGORY_CACHE_KEY = "category:";
 
     public Response getAllCategories() {
         Response response = new Response();
@@ -33,15 +41,29 @@ public class CategoryService implements ICategoryService {
         Response response = new Response();
 
         try {
+
+            CategoryDTO categoryDTO = (CategoryDTO) redisTemplate.opsForValue().get(CATEGORY_CACHE_KEY + id);
+
+            if (categoryDTO != null) {
+                response.setMessage("successful");
+                response.setStatusCode(200);
+                response.setCategory(categoryDTO);
+            }
             Category category = categoryRepository.findById(id)
                     .orElseThrow(() -> new MyException("Категория не найдена"));
 
+
+            categoryDTO = Utils.mapCategoryEntityToCategoryDTO(category);
+            redisTemplate.opsForValue().set(CATEGORY_CACHE_KEY + id, categoryDTO, Duration.ofMinutes(10));
+
             response.setStatusCode(200);
             response.setMessage("successful");
-            response.setCategory(Utils.mapCategoryEntityToCategoryDTO(category));
+            response.setCategory(categoryDTO);
+
         } catch (MyException e) {
             response.setStatusCode(404);
             response.setMessage("error get category by id" + e.getMessage());
+
         } catch (Exception e) {
             response.setStatusCode(500);
             response.setMessage("error get category by id" + e.getMessage());
@@ -70,6 +92,8 @@ public class CategoryService implements ICategoryService {
             categoryRepository.delete(category);
             response.setStatusCode(200);
             response.setMessage("successful");
+
+            redisTemplate.delete(CATEGORY_CACHE_KEY + id);
         } catch (MyException e) {
             response.setStatusCode(404);
             response.setMessage("error delete category by id" + e.getMessage());
@@ -87,6 +111,10 @@ public class CategoryService implements ICategoryService {
 
             product.setCategory(category);
             productRepository.save(product);
+
+            redisTemplate.delete(CATEGORY_CACHE_KEY + categoryId);
+            redisTemplate.delete("product:" + productId);
+            redisTemplate.delete("products");
 
             response.setProduct(Utils.mapProductEntityToProductDTO(product));
             response.setStatusCode(200);
