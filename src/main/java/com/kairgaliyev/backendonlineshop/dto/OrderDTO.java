@@ -5,11 +5,12 @@ import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import lombok.Data;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.List;
 
 @Data
-public class OrderDTO {
+public class OrderDTO implements Serializable {
 
     private Long id;
 

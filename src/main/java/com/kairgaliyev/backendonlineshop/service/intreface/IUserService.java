@@ -26,9 +26,6 @@ public interface IUserService {
 
     Response changeRoleById(String userId, UserRole role);
 
-    //TODO impl current logged
-    Response getUserOrders(String userId);
-
     //TODO Response changePasswordById(String userId, String oldPassword, String newPassword);  //by current logged;
 
     //TODO search user (like in product service interface search)

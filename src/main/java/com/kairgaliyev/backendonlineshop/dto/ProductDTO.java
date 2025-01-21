@@ -3,8 +3,10 @@ package com.kairgaliyev.backendonlineshop.dto;
 import jakarta.validation.constraints.Positive;
 import lombok.Data;
 
+import java.io.Serializable;
+
 @Data
-public class ProductDTO {
+public class ProductDTO implements Serializable {
     private Long id;
     private String name;
     private String description;

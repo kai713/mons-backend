@@ -3,11 +3,12 @@ package com.kairgaliyev.backendonlineshop.dto;
 import com.kairgaliyev.backendonlineshop.model.Product;
 import lombok.Data;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 @Data
-public class CategoryDTO {
+public class CategoryDTO implements Serializable {
     private Long id;
 
     private String name;

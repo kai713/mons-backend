@@ -79,7 +79,9 @@ public class Utils {
         productDTO.setName(product.getName());
         productDTO.setDescription(product.getDescription());
         productDTO.setPrice(product.getPrice());
-        productDTO.setCategoryId(product.getCategory().getId());
+        if(productDTO.getCategoryId() != null) {
+            productDTO.setCategoryId(product.getCategory().getId());
+        }
         return productDTO;
     }
 

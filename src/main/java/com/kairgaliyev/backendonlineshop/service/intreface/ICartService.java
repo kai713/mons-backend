@@ -7,7 +7,7 @@ public interface ICartService {
     //TODO curr user
     Response getCartById(Long userId);
 
-    //TODO test + by current user
+    //TODO test + by current user + implement: logic is product in cart?
     Response addProduct(Long userId, Long productId, int quantity);
 
     //TODO curr user

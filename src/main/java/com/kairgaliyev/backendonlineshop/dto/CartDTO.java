@@ -2,10 +2,11 @@ package com.kairgaliyev.backendonlineshop.dto;
 
 import com.kairgaliyev.backendonlineshop.model.Cart;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class CartDTO {
+public class CartDTO implements Serializable {
     private Long id;
     private List<CartItemDTO> cartItems;
 

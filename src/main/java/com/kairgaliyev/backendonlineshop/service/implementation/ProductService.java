@@ -8,8 +8,10 @@ import com.kairgaliyev.backendonlineshop.repository.ProductRepository;
 import com.kairgaliyev.backendonlineshop.service.intreface.IProductService;
 import com.kairgaliyev.backendonlineshop.utils.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
+import java.time.Duration;
 import java.util.List;
 
 @Service
@@ -17,6 +19,11 @@ public class ProductService implements IProductService {
 
     @Autowired
     private ProductRepository productRepository;
+    @Autowired
+    private RedisTemplate<String, Object> redisTemplate;
+
+    private static final String PRODUCT_CACHE_PREFIX = "product:";
+    private static final String PRODUCTS_CACHE_PREFIX = "products:";
 
     @Override
     public Response addProduct(ProductDTO productDTO) {
@@ -31,6 +38,8 @@ public class ProductService implements IProductService {
             newProduct.setStockQuantity(productDTO.getStock());
 
             productRepository.save(newProduct);
+
+            redisTemplate.delete(PRODUCTS_CACHE_PREFIX);
 
             response.setStatusCode(200);
             response.setMessage("successful");
@@ -62,6 +71,10 @@ public class ProductService implements IProductService {
 
             productRepository.save(existingProduct);
 
+            String cacheKey = PRODUCT_CACHE_PREFIX + productDTO.getId();
+            redisTemplate.delete(cacheKey);
+            redisTemplate.delete(PRODUCTS_CACHE_PREFIX);
+
             response.setMessage("successful");
             response.setStatusCode(200);
             response.setProduct(productDTO);
@@ -88,6 +101,10 @@ public class ProductService implements IProductService {
 
             productRepository.delete(existingProduct);
 
+            String cacheKey = PRODUCT_CACHE_PREFIX + productId;
+            redisTemplate.delete(cacheKey);
+            redisTemplate.delete(PRODUCTS_CACHE_PREFIX);
+
             response.setStatusCode(200);
             response.setMessage("successful");
 
@@ -107,11 +124,21 @@ public class ProductService implements IProductService {
         Response response = new Response();
 
         try {
+            List<ProductDTO> productDTOList = (List<ProductDTO>) redisTemplate.opsForValue().get(PRODUCTS_CACHE_PREFIX);
+
+            if(productDTOList != null) {
+                response.setStatusCode(200);
+                response.setMessage("successful");
+                response.setProductList(productDTOList);
+            }
+
             List<Product> productList = productRepository.findAll();
-            List<ProductDTO> productDTOListDTO = Utils.mapProductListEntityToProductListDTO(productList);
+            productDTOList = Utils.mapProductListEntityToProductListDTO(productList);
             response.setStatusCode(200);
             response.setMessage("successful");
-            response.setProductList(productDTOListDTO);
+            response.setProductList(productDTOList);
+
+            redisTemplate.opsForValue().set(PRODUCT_CACHE_PREFIX, productDTOList, Duration.ofMinutes(20));
 
         } catch (Exception e) {
             response.setStatusCode(500);
@@ -123,10 +150,24 @@ public class ProductService implements IProductService {
     @Override
     public Response getProductById(String productId) {
         Response response = new Response();
+        String cacheKey = PRODUCT_CACHE_PREFIX + productId;
 
         try {
+            ProductDTO cachedProduct = (ProductDTO) redisTemplate.opsForValue().get(cacheKey);
+
+            if (cachedProduct != null) {
+                response.setProduct(cachedProduct);
+                response.setStatusCode(200);
+                response.setMessage("successful (from cache)");
+                return response;
+            }
+
             Product searchProduct = productRepository.findById(Long.parseLong(productId)).orElseThrow(() -> new MyException("product not found"));
-            response.setProduct(Utils.mapProductEntityToProductDTO(searchProduct));
+
+            ProductDTO productDTO = Utils.mapProductEntityToProductDTO(searchProduct);
+
+            redisTemplate.opsForValue().set(cacheKey, productDTO, Duration.ofMinutes(10));
+            response.setProduct(productDTO);
 
             response.setStatusCode(200);
             response.setMessage("successful");

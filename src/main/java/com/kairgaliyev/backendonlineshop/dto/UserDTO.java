@@ -7,11 +7,12 @@ import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import lombok.Data;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 @Data
-public class UserDTO {
+public class UserDTO implements Serializable {
 
     private Long id;
     private String email;

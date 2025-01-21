@@ -239,28 +239,4 @@ public class UserService implements IUserService {
         }
         return response;
     }
-
-    @Override
-    public Response getUserOrders(String userId) {
-        Response response = new Response();
-
-        try {
-            User user = userRepository.findById(Long.valueOf(userId)).orElseThrow(() -> new MyException("User Not Found"));
-            response.setStatusCode(200);
-
-            response.setMessage("successful");
-
-            response.setOrderList(Utils.mapOrderListEntityToOrderListDTO(user.getOrders()));
-
-        } catch (MyException e) {
-            response.setStatusCode(404);
-            response.setMessage("error fetching user orders, user id " + userId + "e.getMessage: " + e.getMessage());
-
-        } catch (Exception e) {
-            response.setStatusCode(500);
-            response.setMessage("error fetching user orders, user id " + userId + "e.getMessage: " + e.getMessage());
-
-        }
-        return response;
-    }
 }

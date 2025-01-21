@@ -1,6 +1,8 @@
 package com.kairgaliyev.backendonlineshop.dto;
 
-public class OrderItemDTO {
+import java.io.Serializable;
+
+public class OrderItemDTO implements Serializable {
     private Long id;
     private Long productId;
     private String productName;

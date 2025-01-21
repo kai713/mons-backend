@@ -65,10 +65,4 @@ public class UserController {
         Response response = iUserService.changeRoleById(userId, userRole);
         return ResponseEntity.status(response.getStatusCode()).body(response);
     }
-
-    @GetMapping("/getUserOrder/{userId}")
-    public ResponseEntity<Response> getUserOrder(@PathVariable("userId") String userId) {
-        Response response = iUserService.getUserOrders(userId);
-        return ResponseEntity.status(response.getStatusCode()).body(response);
-    }
 }

@@ -2,7 +2,9 @@ package com.kairgaliyev.backendonlineshop.dto;
 
 import com.kairgaliyev.backendonlineshop.model.CartItem;
 
-public class CartItemDTO {
+import java.io.Serializable;
+
+public class CartItemDTO implements Serializable {
     private Long id;
     private Long productId;
     private String productName;

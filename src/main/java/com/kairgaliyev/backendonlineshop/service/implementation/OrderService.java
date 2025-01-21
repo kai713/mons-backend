@@ -1,5 +1,6 @@
 package com.kairgaliyev.backendonlineshop.service.implementation;
 
+import com.kairgaliyev.backendonlineshop.dto.OrderDTO;
 import com.kairgaliyev.backendonlineshop.dto.Response;
 import com.kairgaliyev.backendonlineshop.dto.StatusRoleRequest;
 import com.kairgaliyev.backendonlineshop.enums.OrderStatus;
@@ -14,8 +15,10 @@ import com.kairgaliyev.backendonlineshop.repository.UserRepository;
 import com.kairgaliyev.backendonlineshop.service.intreface.IOrderService;
 import com.kairgaliyev.backendonlineshop.utils.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
+import java.time.Duration;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -30,20 +33,37 @@ public class OrderService implements IOrderService {
     private CartService cartService;
     @Autowired
     private CartRepository cartRepository;
+    @Autowired
+    private RedisTemplate<String, Object> redisTemplate;
 
-    // Получение всех заказов пользователя
+    private static final String USER_ORDERS_CACHE_KEY = "userOrders:";
+    private static final String ORDER_CACHE_KEY = "order:";
+
     public Response getUserOrders(Long userId) {
         Response response = new Response();
 
+        List<OrderDTO> ordersFromCache = (List<OrderDTO>) redisTemplate.opsForValue().get(USER_ORDERS_CACHE_KEY + userId);
+
+        if (ordersFromCache != null) {
+            response.setStatusCode(200);
+            response.setMessage("Success");
+            response.setOrderList(ordersFromCache);
+            return response;
+        }
+
         List<Order> orders = orderRepository.findByUserId(userId);
+
+        List<OrderDTO> orderDTOS = Utils.mapOrderListEntityToOrderListDTO(orders);
+
+        response.setOrderList(orderDTOS);
         response.setStatusCode(200);
         response.setMessage("Success");
-        response.setOrderList(Utils.mapOrderListEntityToOrderListDTO(orders));
+
+        redisTemplate.opsForValue().set(USER_ORDERS_CACHE_KEY + userId, orderDTOS, Duration.ofMinutes(10));
 
         return response;
     }
 
-    // Создание заказа на основе корзины
     public Response createOrder(Long userId) {
         Response response = new Response();
 
@@ -72,6 +92,8 @@ public class OrderService implements IOrderService {
 
             Order order1 = orderRepository.save(order);
 
+            redisTemplate.delete(USER_ORDERS_CACHE_KEY + userId);
+
             response.setStatusCode(200);
             response.setMessage("Success");
             response.setOrder(Utils.mapOrderEntityToOrderDTO(order1));
@@ -79,6 +101,7 @@ public class OrderService implements IOrderService {
         } catch (MyException e) {
             response.setStatusCode(404);
             response.setMessage("Error save order " + e.getMessage());
+
         } catch (Exception e) {
             response.setStatusCode(500);
             response.setMessage("Error save order " + e.getMessage());
@@ -87,17 +110,29 @@ public class OrderService implements IOrderService {
         return response;
     }
 
-    // Получение заказа по ID
     public Response getOrder(Long orderId) {
         Response response = new Response();
 
         try {
+            OrderDTO orderFromCache = (OrderDTO) redisTemplate.opsForValue().get(ORDER_CACHE_KEY + orderId);
+
+            if (orderFromCache != null) {
+                response.setStatusCode(200);
+                response.setMessage("Success");
+                response.setOrder(orderFromCache);
+                return response;
+            }
+
             Order order = orderRepository.findById(orderId)
                     .orElseThrow(() -> new MyException("Order not found"));
 
+            OrderDTO orderDTOS = Utils.mapOrderEntityToOrderDTO(order);
+
+            redisTemplate.opsForValue().set(ORDER_CACHE_KEY + orderId, orderDTOS, Duration.ofMinutes(10));
+
             response.setStatusCode(200);
             response.setMessage("Success");
-            response.setOrder(Utils.mapOrderEntityToOrderDTO(order));
+            response.setOrder(orderDTOS);
 
         } catch (MyException e) {
             response.setStatusCode(404);
@@ -112,9 +147,17 @@ public class OrderService implements IOrderService {
 
     // Удаление заказа
     public void deleteOrder(Long orderId) {
-        Order order = orderRepository.findById(orderId)
-                .orElseThrow(() -> new MyException("Order not found"));
-        orderRepository.delete(order);
+        try {
+            Order order = orderRepository.findById(orderId)
+                    .orElseThrow(() -> new MyException("Order not found"));
+            orderRepository.delete(order);
+
+            redisTemplate.delete(ORDER_CACHE_KEY + orderId);
+            redisTemplate.delete(USER_ORDERS_CACHE_KEY + orderId);
+
+        } catch (MyException e) {
+            System.out.println(e.getMessage());
+        }
     }
 
     // Обновление статуса заказа
@@ -130,6 +173,10 @@ public class OrderService implements IOrderService {
             response.setStatusCode(200);
             response.setMessage("Success");
             response.setOrder(Utils.mapOrderEntityToOrderDTO(order1));
+
+            redisTemplate.delete(ORDER_CACHE_KEY + orderId);
+            redisTemplate.delete(USER_ORDERS_CACHE_KEY + orderId);
+
         } catch (MyException e) {
             response.setStatusCode(404);
             response.setMessage("Error save order " + e.getMessage());
