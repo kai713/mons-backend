@@ -11,6 +11,7 @@ import com.kairgaliyev.backendonlineshop.repository.CartRepository;
 import com.kairgaliyev.backendonlineshop.repository.ProductRepository;
 import com.kairgaliyev.backendonlineshop.service.intreface.ICartService;
 import com.kairgaliyev.backendonlineshop.utils.Utils;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
@@ -18,16 +19,13 @@ import org.springframework.stereotype.Service;
 import java.time.Duration;
 
 @Service
+@RequiredArgsConstructor
 public class CartService implements ICartService {
 
-    @Autowired
-    private CartRepository cartRepository;
-    @Autowired
-    private ProductRepository productRepository;
-    @Autowired
-    private CartItemRepository cartItemRepository;
-    @Autowired
-    private RedisTemplate<String, Object> redisTemplate;
+    private final CartRepository cartRepository;
+    private final ProductRepository productRepository;
+    private final CartItemRepository cartItemRepository;
+    private final RedisTemplate<String, Object> redisTemplate;
 
     private static final String CART_CACHE_KEY = "cart:";
 

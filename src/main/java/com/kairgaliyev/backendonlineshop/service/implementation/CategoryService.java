@@ -9,21 +9,19 @@ import com.kairgaliyev.backendonlineshop.repository.CategoryRepository;
 import com.kairgaliyev.backendonlineshop.repository.ProductRepository;
 import com.kairgaliyev.backendonlineshop.service.intreface.ICategoryService;
 import com.kairgaliyev.backendonlineshop.utils.Utils;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import java.time.Duration;
 
 @Service
+@RequiredArgsConstructor
 public class CategoryService implements ICategoryService {
 
-    @Autowired
-    private CategoryRepository categoryRepository;
-    @Autowired
-    private ProductRepository productRepository;
-    @Autowired
-    private RedisTemplate<String, Object> redisTemplate;
+    private final CategoryRepository categoryRepository;
+    private final ProductRepository productRepository;
+    private final RedisTemplate<String, Object> redisTemplate;
 
     private static final String CATEGORY_CACHE_KEY = "category:";
 

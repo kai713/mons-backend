@@ -1,11 +1,19 @@
 package com.kairgaliyev.backendonlineshop.dto;
 
 import com.kairgaliyev.backendonlineshop.model.Cart;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.io.Serializable;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class CartDTO implements Serializable {
     private Long id;
     private List<CartItemDTO> cartItems;
@@ -15,25 +23,5 @@ public class CartDTO implements Serializable {
         this.cartItems = cart.getCartItems().stream()
                 .map(CartItemDTO::new)
                 .collect(Collectors.toList());
-    }
-
-    public CartDTO() {
-    }
-
-    // Геттеры и сеттеры
-    public Long getId() {
-        return id;
-    }
-
-    public List<CartItemDTO> getCartItems() {
-        return cartItems;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public void setCartItems(List<CartItemDTO> cartItems) {
-        this.cartItems = cartItems;
     }
 }

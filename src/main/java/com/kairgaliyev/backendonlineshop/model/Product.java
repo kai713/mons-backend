@@ -3,11 +3,15 @@ package com.kairgaliyev.backendonlineshop.model;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.Positive;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "products")
+@Getter
+@Setter
 public class Product {
 
     @PrePersist
@@ -36,58 +40,4 @@ public class Product {
     @ManyToOne
     @JoinColumn(name = "category_id")
     private Category category;
-
-    //Boil code
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public @Positive(message = "product price must be a positive value") Double getPrice() {
-        return price;
-    }
-
-    public void setPrice(@Positive(message = "product price must be a positive value") Double price) {
-        this.price = price;
-    }
-
-    public @Min(value = 0, message = "stock quantity cannot be negative") Integer getStockQuantity() {
-        return stockQuantity;
-    }
-
-    public void setStockQuantity(@Min(value = 0, message = "stock quantity cannot be negative") Integer stockQuantity) {
-        this.stockQuantity = stockQuantity;
-    }
-
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public Category getCategory() {
-        return category;
-    }
-
-    public void setCategory(Category category) {
-        this.category = category;
-    }
 }

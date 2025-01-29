@@ -6,6 +6,7 @@ import com.kairgaliyev.backendonlineshop.dto.UserDTO;
 import com.kairgaliyev.backendonlineshop.enums.UserRole;
 import com.kairgaliyev.backendonlineshop.service.implementation.UserService;
 import com.kairgaliyev.backendonlineshop.service.intreface.IUserService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -15,12 +16,11 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/users")
+@RequiredArgsConstructor
 public class UserController {
 
-    @Autowired
-    private IUserService iUserService;
-    @Autowired
-    private UserService userService;
+    private final IUserService iUserService;
+    private final UserService userService;
 
     @GetMapping("/all")
     @PreAuthorize("hasAuthority('ADMIN')")

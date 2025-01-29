@@ -15,7 +15,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "users")
-public class User implements UserDetails {
+public class    User implements UserDetails {
 
     @PrePersist
     protected void onCreate() {

@@ -1,9 +1,17 @@
 package com.kairgaliyev.backendonlineshop.dto;
 
 import com.kairgaliyev.backendonlineshop.model.CartItem;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.io.Serializable;
 
+@AllArgsConstructor
+@NoArgsConstructor
+@Setter
+@Getter
 public class CartItemDTO implements Serializable {
     private Long id;
     private Long productId;
@@ -17,49 +25,5 @@ public class CartItemDTO implements Serializable {
         this.productName = cartItem.getProduct().getName();
         this.productPrice = cartItem.getProduct().getPrice();
         this.quantity = cartItem.getQuantity();
-    }
-
-    public CartItemDTO() {
-    }
-
-    // Геттеры и сеттеры
-    public Long getId() {
-        return id;
-    }
-
-    public Long getProductId() {
-        return productId;
-    }
-
-    public String getProductName() {
-        return productName;
-    }
-
-    public Double getProductPrice() {
-        return productPrice;
-    }
-
-    public int getQuantity() {
-        return quantity;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public void setProductId(Long productId) {
-        this.productId = productId;
-    }
-
-    public void setProductName(String productName) {
-        this.productName = productName;
-    }
-
-    public void setProductPrice(Double productPrice) {
-        this.productPrice = productPrice;
-    }
-
-    public void setQuantity(int quantity) {
-        this.quantity = quantity;
     }
 }

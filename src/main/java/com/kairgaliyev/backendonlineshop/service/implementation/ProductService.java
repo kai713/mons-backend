@@ -7,7 +7,7 @@ import com.kairgaliyev.backendonlineshop.model.Product;
 import com.kairgaliyev.backendonlineshop.repository.ProductRepository;
 import com.kairgaliyev.backendonlineshop.service.intreface.IProductService;
 import com.kairgaliyev.backendonlineshop.utils.Utils;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
@@ -15,12 +15,11 @@ import java.time.Duration;
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class ProductService implements IProductService {
 
-    @Autowired
-    private ProductRepository productRepository;
-    @Autowired
-    private RedisTemplate<String, Object> redisTemplate;
+    private final ProductRepository productRepository;
+    private final RedisTemplate<String, Object> redisTemplate;
 
     private static final String PRODUCT_CACHE_PREFIX = "product:";
     private static final String PRODUCTS_CACHE_PREFIX = "products:";
@@ -126,7 +125,7 @@ public class ProductService implements IProductService {
         try {
             List<ProductDTO> productDTOList = (List<ProductDTO>) redisTemplate.opsForValue().get(PRODUCTS_CACHE_PREFIX);
 
-            if(productDTOList != null) {
+            if (productDTOList != null) {
                 response.setStatusCode(200);
                 response.setMessage("successful");
                 response.setProductList(productDTOList);

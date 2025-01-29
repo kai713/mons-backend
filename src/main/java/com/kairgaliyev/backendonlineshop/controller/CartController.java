@@ -2,16 +2,17 @@ package com.kairgaliyev.backendonlineshop.controller;
 
 import com.kairgaliyev.backendonlineshop.dto.Response;
 import com.kairgaliyev.backendonlineshop.service.intreface.ICartService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/cart")
+@RequiredArgsConstructor
 public class CartController {
 
-    @Autowired
-    private ICartService cartService;
+    private final ICartService cartService;
 
     @GetMapping("/{userId}")
     public ResponseEntity<Response> getCart(@PathVariable("userId") Long userId) {

@@ -14,7 +14,7 @@ import com.kairgaliyev.backendonlineshop.repository.OrderRepository;
 import com.kairgaliyev.backendonlineshop.repository.UserRepository;
 import com.kairgaliyev.backendonlineshop.service.intreface.IOrderService;
 import com.kairgaliyev.backendonlineshop.utils.Utils;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
@@ -23,18 +23,13 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class OrderService implements IOrderService {
-
-    @Autowired
-    private OrderRepository orderRepository;
-    @Autowired
-    private UserRepository userRepository;
-    @Autowired
-    private CartService cartService;
-    @Autowired
-    private CartRepository cartRepository;
-    @Autowired
-    private RedisTemplate<String, Object> redisTemplate;
+    private final OrderRepository orderRepository;
+    private final UserRepository userRepository;
+    private final CartService cartService;
+    private final CartRepository cartRepository;
+    private final RedisTemplate<String, Object> redisTemplate;
 
     private static final String USER_ORDERS_CACHE_KEY = "userOrders:";
     private static final String ORDER_CACHE_KEY = "order:";

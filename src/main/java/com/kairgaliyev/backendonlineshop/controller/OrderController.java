@@ -3,6 +3,7 @@ package com.kairgaliyev.backendonlineshop.controller;
 import com.kairgaliyev.backendonlineshop.dto.Response;
 import com.kairgaliyev.backendonlineshop.dto.StatusRoleRequest;
 import com.kairgaliyev.backendonlineshop.service.intreface.IOrderService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -10,10 +11,10 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/order")
+@RequiredArgsConstructor
 public class OrderController {
 
-    @Autowired
-    private IOrderService orderService;
+    private final IOrderService orderService;
 
     @GetMapping("/user/{userId}")
     public ResponseEntity<Response> getUserOrders(@PathVariable Long userId) {
