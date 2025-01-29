@@ -13,7 +13,6 @@ import com.kairgaliyev.backendonlineshop.service.intreface.IUserService;
 import com.kairgaliyev.backendonlineshop.utils.JWTUtils;
 import com.kairgaliyev.backendonlineshop.utils.Utils;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -29,6 +28,7 @@ public class UserService implements IUserService {
     private final JWTUtils jwtUtils;
     private final AuthenticationManager authenticationManager;
     private final CartRepository cartRepository;
+    private final RefreshTokenService refreshTokenService;
 
     @Override
     public Response register(User user) {
@@ -75,11 +75,14 @@ public class UserService implements IUserService {
             var user = userRepository.findByEmail(loginRequest.getEmail()).orElseThrow(() -> new MyException("user Not found"));
 
             var token = jwtUtils.generateToken(user);
+            var refreshToken = refreshTokenService.createRefreshToken(user.getEmail());
+
             //build response
             response.setStatusCode(200);
             response.setToken(token);
+            response.setRefreshToken(refreshToken.getToken()); // Добавляем refresh token
             response.setRole(user.getRole().toString());
-            response.setExpirationTime("7 Days");
+            response.setExpirationTime("1 hour");
             response.setMessage("successful");
 
         } catch (MyException e) {

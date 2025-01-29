@@ -14,6 +14,7 @@ public class Response {
     private String message;
 
     private String token;
+    private String refreshToken;
     private String role;
     private String expirationTime;
     private String ConfirmationCode;

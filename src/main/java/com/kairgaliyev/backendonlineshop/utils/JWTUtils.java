@@ -14,7 +14,7 @@ import java.util.function.Function;
 
 @Service
 public class JWTUtils {
-    private static final long EXPIRATION_TIME = 1000 * 60 * 24 * 7; //for 7 days
+    private static final long EXPIRATION_TIME = 1000 * 60 * 60; //for 1 hour
 
     private final SecretKey Key;
 
@@ -29,7 +29,6 @@ public class JWTUtils {
     public String generateToken(UserDetails userDetails) {
         return Jwts.builder()
                 .subject(userDetails.getUsername())
-//                .claim("authorities", userDetails.getAuthorities())
                 .issuedAt(new Date(System.currentTimeMillis()))
                 .expiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
                 .signWith(Key)
