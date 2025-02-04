@@ -6,6 +6,7 @@ import com.kairgaliyev.backendonlineshop.dto.UserDTO;
 import com.kairgaliyev.backendonlineshop.enums.UserRole;
 import com.kairgaliyev.backendonlineshop.service.implementation.UserService;
 import com.kairgaliyev.backendonlineshop.service.intreface.IUserService;
+import com.kairgaliyev.backendonlineshop.utils.JWTUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -14,13 +15,14 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+//TODO: test due to changed jwt logic
 @RestController
 @RequestMapping("/users")
 @RequiredArgsConstructor
 public class UserController {
 
     private final IUserService iUserService;
-    private final UserService userService;
+    private final JWTUtils jwtUtils;
 
     @GetMapping("/all")
     @PreAuthorize("hasAuthority('ADMIN')")
@@ -50,11 +52,11 @@ public class UserController {
     }
 
     @GetMapping("/get-logged-in-profile-info")
-    public ResponseEntity<Response> getLoggedInUserProfile() {
+    public ResponseEntity<Response> getLoggedInUserProfile(@RequestHeader("Authorization") String authHeader) {
+        String token = authHeader.replace("Bearer ", "");
+        Long userId = jwtUtils.extractUserId(token);
 
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String email = authentication.getName();
-        Response response = iUserService.getMyInfo(email);
+        Response response = iUserService.getMyInfo(userId);
         return ResponseEntity.status(response.getStatusCode()).body(response);
     }
 

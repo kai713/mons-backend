@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Map;
 
+//TODO: test due to changed jwt logic
 @RestController
 @RequestMapping("/auth")
 @RequiredArgsConstructor
@@ -26,6 +27,7 @@ public class AuthController {
     private final IRefreshTokenService refreshTokenService;
     private final JWTUtils jwtUtils;
 
+    //TODO UserRequest
     @PostMapping("/register")
     public ResponseEntity<Response> register(@RequestBody User user) {
         Response response = userService.register(user);
@@ -34,8 +36,12 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<Response> login(@RequestBody LoginRequest loginRequest) {
-        Response response = userService.login(loginRequest);
-        return ResponseEntity.status(response.getStatusCode()).body(response);
+        try {
+            Response response = userService.login(loginRequest);
+            return ResponseEntity.status(response.getStatusCode()).body(response);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new Response());
+        }
     }
 
     @PostMapping("/refresh")
