@@ -79,6 +79,7 @@ public class Utils {
         productDTO.setName(product.getName());
         productDTO.setDescription(product.getDescription());
         productDTO.setPrice(product.getPrice());
+        productDTO.setImageUrl(product.getImageUrl());
 
         if(product.getCategory() != null) {
             productDTO.setCategoryId(product.getCategory().getId());
@@ -91,7 +92,6 @@ public class Utils {
         return productList.stream().map(Utils::mapProductEntityToProductDTO).collect(Collectors.toList());
     }
 
-    // Маппинг Cart -> CartDTO
     public static CartDTO mapCartEntityToCartDTO(Cart cart) {
         CartDTO cartDTO = new CartDTO();
         cartDTO.setId(cart.getId());
@@ -99,14 +99,12 @@ public class Utils {
         return cartDTO;
     }
 
-    // Маппинг списка Cart -> List<CartDTO>
     public static List<CartDTO> mapCartListEntityToCartListDTO(List<Cart> cartList) {
         return cartList.stream()
                 .map(Utils::mapCartEntityToCartDTO)
                 .collect(Collectors.toList());
     }
 
-    // Маппинг CartItem -> CartItemDTO
     public static CartItemDTO mapCartItemEntityToDTO(CartItem cartItem) {
         CartItemDTO dto = new CartItemDTO();
         dto.setId(cartItem.getId());
@@ -117,7 +115,6 @@ public class Utils {
         return dto;
     }
 
-    // Маппинг списка CartItem -> List<CartItemDTO>
     public static List<CartItemDTO> mapCartItemListEntityToDTO(List<CartItem> cartItems) {
         return cartItems.stream()
                 .map(Utils::mapCartItemEntityToDTO)

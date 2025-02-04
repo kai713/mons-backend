@@ -4,10 +4,10 @@ import com.kairgaliyev.backendonlineshop.dto.ProductDTO;
 import com.kairgaliyev.backendonlineshop.dto.Response;
 import com.kairgaliyev.backendonlineshop.service.intreface.IProductService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("/product")
@@ -24,15 +24,26 @@ public class ProductController {
 
     @PostMapping("/add")
     @PreAuthorize("hasAuthority('ADMIN')")
-    public ResponseEntity<Response> addProduct(@RequestBody ProductDTO productDTO) {
-        Response response = productService.addProduct(productDTO);
+    public ResponseEntity<Response> addProduct(@RequestPart("productDTO") ProductDTO productDTO,
+                                               @RequestPart(value = "photo", required = false) MultipartFile image) {
+        if (image != null) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        Response response = productService.addProduct(productDTO, image);
         return ResponseEntity.status(response.getStatusCode()).body(response);
     }
 
+    //TODO check maybe smth will went wrong :(
     @PutMapping("/update")
     @PreAuthorize("hasAuthority('ADMIN')")
-    public ResponseEntity<Response> updateProduct(@RequestBody ProductDTO productDTO) {
-        Response response = productService.updateProduct(productDTO);
+    public ResponseEntity<Response> updateProduct(@RequestPart("productDTO") ProductDTO productDTO,
+                                                  @RequestPart(value = "photo", required = false) MultipartFile image) {
+        if (image != null) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        Response response = productService.updateProduct(productDTO, image);
         return ResponseEntity.status(response.getStatusCode()).body(response);
     }
 

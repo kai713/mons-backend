@@ -5,11 +5,14 @@ import com.kairgaliyev.backendonlineshop.dto.Response;
 import com.kairgaliyev.backendonlineshop.exception.MyException;
 import com.kairgaliyev.backendonlineshop.model.Product;
 import com.kairgaliyev.backendonlineshop.repository.ProductRepository;
+import com.kairgaliyev.backendonlineshop.service.AwsS3Service;
 import com.kairgaliyev.backendonlineshop.service.intreface.IProductService;
 import com.kairgaliyev.backendonlineshop.utils.Utils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.Duration;
 import java.util.List;
@@ -20,21 +23,25 @@ public class ProductService implements IProductService {
 
     private final ProductRepository productRepository;
     private final RedisTemplate<String, Object> redisTemplate;
+    private final AwsS3Service awsS3Service;
 
     private static final String PRODUCT_CACHE_PREFIX = "product:";
     private static final String PRODUCTS_CACHE_PREFIX = "products:";
 
     @Override
-    public Response addProduct(ProductDTO productDTO) {
+    public Response addProduct(ProductDTO productDTO, MultipartFile photo) {
 
         Response response = new Response();
 
         try {
+            String imageUrl = awsS3Service.saveImageToS3(photo);
+
             Product newProduct = new Product();
             newProduct.setName(productDTO.getName());
             newProduct.setDescription(productDTO.getDescription());
             newProduct.setPrice(productDTO.getPrice());
             newProduct.setStockQuantity(productDTO.getStock());
+            newProduct.setImageUrl(imageUrl);
 
             productRepository.save(newProduct);
 
@@ -52,10 +59,11 @@ public class ProductService implements IProductService {
     }
 
     @Override
-    public Response updateProduct(ProductDTO productDTO) {
+    public Response updateProduct(ProductDTO productDTO, MultipartFile photo) {
         Response response = new Response();
 
         try {
+            String imageUrl = awsS3Service.saveImageToS3(photo);
 
             //TODO findByName and do name attribute unique
             Product existingProduct = productRepository.findById(Long.parseLong(productDTO.getId().toString()))
@@ -67,6 +75,7 @@ public class ProductService implements IProductService {
             existingProduct.setPrice(productDTO.getPrice());
             existingProduct.setId(productDTO.getId());
             existingProduct.setStockQuantity(productDTO.getStock());
+            existingProduct.setImageUrl(imageUrl);
 
             productRepository.save(existingProduct);
 
