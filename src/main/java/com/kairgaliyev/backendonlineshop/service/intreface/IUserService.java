@@ -22,7 +22,7 @@ public interface IUserService {
     Response getUserById(String userId);
 
     //getCurrentLoggedInUser
-    Response getMyInfo(Long userId);
+    Response getMyInfo(Long id);
 
     Response changeRoleById(String userId, UserRole role);
 

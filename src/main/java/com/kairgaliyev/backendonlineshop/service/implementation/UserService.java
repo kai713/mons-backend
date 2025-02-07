@@ -193,11 +193,11 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public Response getMyInfo(Long id) {
+    public Response getMyInfo(Long userId) {
         Response response = new Response();
 
         try {
-            User user = userRepository.findById(id).orElseThrow(() -> new MyException("User Not Found"));
+            User user = userRepository.findById(userId).orElseThrow(() -> new MyException("User Not Found"));
             UserDTO userDTO = Utils.mapUserEntityToUserDTO(user);
             response.setStatusCode(200);
             response.setMessage("successful");
