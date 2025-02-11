@@ -18,6 +18,8 @@ import org.springframework.stereotype.Service;
 
 import java.time.Duration;
 
+//TODO: review and if need refactor logic.
+//TODO: refactor check is the product in stock? = is quantity < stock
 @Service
 @RequiredArgsConstructor
 public class CartService implements ICartService {
@@ -56,13 +58,11 @@ public class CartService implements ICartService {
         return response;
     }
 
-    // Добавление товара в корзину
     public Response addProduct(Long userId, Long productId, int quantity) {
 
         Response response = new Response();
 
         try {
-            //Do not need due to userId will give by securityContext ???
             Cart cart = cartRepository.findByUserId(userId)
                     .orElseThrow(() -> new MyException("Cart not found"));
 
@@ -78,7 +78,7 @@ public class CartService implements ICartService {
                 cartItem.setQuantity(cartItem.getQuantity() + quantity);
                 cartItemRepository.save(cartItem);
             } else {
-                cartItem = new CartItem(cart, product, quantity);
+                cartItem = new CartItem(cart, product, quantity, product.getName(), product.getPrice(), product.getImageUrl());
                 cartItemRepository.save(cartItem);
                 cart.getCartItems().add(cartItem);
             }
@@ -103,7 +103,6 @@ public class CartService implements ICartService {
         return response;
     }
 
-    // Удаление товара из корзины
     public Response removeProduct(Long userId, Long productId) {
 
         Response response = new Response();
@@ -112,6 +111,7 @@ public class CartService implements ICartService {
             Cart cart = cartRepository.findByUserId(userId)
                     .orElseThrow(() -> new MyException("cart not found"));
             cart.getCartItems().removeIf(item -> item.getProduct().getId().equals(productId));
+
             cartRepository.save(cart);
             response.setStatusCode(200);
             response.setMessage("successful");
@@ -131,7 +131,6 @@ public class CartService implements ICartService {
         return response;
     }
 
-    // Очистка корзины
     public void clearCart(Long userId) {
         Cart cart = cartRepository.findByUserId(userId)
                 .orElseThrow(() -> new MyException("Cart not found"));
@@ -142,7 +141,6 @@ public class CartService implements ICartService {
         cartRepository.save(cart);
     }
 
-    // Изменение количества товара в корзине
     public Response updateProductQuantity(Long userId, Long productId, int quantity) {
 
         Response response = new Response();
@@ -155,6 +153,8 @@ public class CartService implements ICartService {
                     .filter(item -> item.getProduct().getId().equals(productId))
                     .findFirst()
                     .orElseThrow(() -> new MyException("Product not found in cart"));
+
+//            cartItem.setQuantity(cartItem.getQuantity() + quantity);
 
             if (quantity <= 0) {
                 cart.getCartItems().remove(cartItem);

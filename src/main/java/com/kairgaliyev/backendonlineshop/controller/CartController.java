@@ -14,15 +14,15 @@ public class CartController {
 
     private final ICartService cartService;
 
-    @GetMapping("/{userId}")
-    public ResponseEntity<Response> getCart(@PathVariable("userId") Long userId) {
+    @GetMapping
+    public ResponseEntity<Response> getCart(@RequestAttribute("userId") Long userId) {
         Response response = cartService.getCartById(userId);
         return ResponseEntity.status(response.getStatusCode()).body(response);
     }
 
     @PostMapping("/add")
     public ResponseEntity<Response> addProduct(
-            @RequestParam Long userId,
+            @RequestAttribute("userId") Long userId,
             @RequestParam Long productId,
             @RequestParam int quantity) {
         Response response = cartService.addProduct(userId, productId, quantity);
@@ -31,21 +31,21 @@ public class CartController {
 
     @DeleteMapping("/remove")
     public ResponseEntity<Response> removeProduct(
-            @RequestParam Long userId,
+            @RequestAttribute("userId") Long userId,
             @RequestParam Long productId) {
         Response response = cartService.removeProduct(userId, productId);
         return ResponseEntity.status(response.getStatusCode()).body(response);
     }
 
-    @DeleteMapping("/clear/{userId}")
-    public ResponseEntity<Void> clearCart(@PathVariable("userId") Long userId) {
+    @DeleteMapping("/clear")
+    public ResponseEntity<Void> clearCart(@RequestAttribute("userId") Long userId) {
         cartService.clearCart(userId);
         return ResponseEntity.ok().build();
     }
 
     @PutMapping("/update")
     public ResponseEntity<Response> updateQuantity(
-            @RequestParam Long userId,
+            @RequestAttribute("userId") Long userId,
             @RequestParam Long productId,
             @RequestParam int quantity) {
         return ResponseEntity.ok(cartService.updateProductQuantity(userId, productId, quantity));

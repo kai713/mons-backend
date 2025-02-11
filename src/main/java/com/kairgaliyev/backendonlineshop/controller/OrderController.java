@@ -4,7 +4,6 @@ import com.kairgaliyev.backendonlineshop.dto.Response;
 import com.kairgaliyev.backendonlineshop.dto.StatusRoleRequest;
 import com.kairgaliyev.backendonlineshop.service.intreface.IOrderService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -16,14 +15,14 @@ public class OrderController {
 
     private final IOrderService orderService;
 
-    @GetMapping("/user/{userId}")
-    public ResponseEntity<Response> getUserOrders(@PathVariable Long userId) {
+    @GetMapping("/user")
+    public ResponseEntity<Response> getUserOrders(@RequestAttribute("userId") Long userId) {
         Response response = orderService.getUserOrders(userId);
         return ResponseEntity.status(response.getStatusCode()).body(response);
     }
 
     @PostMapping("/create")
-    public ResponseEntity<Response> createOrder(@RequestParam Long userId) {
+    public ResponseEntity<Response> createOrder(@RequestAttribute("userId") Long userId) {
         Response response = orderService.createOrder(userId);
         return ResponseEntity.status(response.getStatusCode()).body(response);
     }
@@ -42,7 +41,9 @@ public class OrderController {
         return ResponseEntity.ok().build();
     }
 
+    //TODO: implement the logic of update status
     @PutMapping("/status")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<Response> updateOrderStatus(
             @RequestParam Long orderId,
             @RequestBody StatusRoleRequest status) {

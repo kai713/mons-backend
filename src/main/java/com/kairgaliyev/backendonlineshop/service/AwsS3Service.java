@@ -40,6 +40,7 @@ public class AwsS3Service {
             ObjectMetadata metadata = new ObjectMetadata();
 
             metadata.setContentType(photo.getContentType());
+            metadata.setContentLength(photo.getSize());
             PutObjectRequest putObjectRequest = new PutObjectRequest(bucketName, s3FileName, inputStream, metadata);
             s3Client.putObject(putObjectRequest);
 

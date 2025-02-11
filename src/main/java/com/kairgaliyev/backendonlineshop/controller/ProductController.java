@@ -26,7 +26,7 @@ public class ProductController {
     @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<Response> addProduct(@RequestPart("productDTO") ProductDTO productDTO,
                                                @RequestPart(value = "photo", required = false) MultipartFile image) {
-        if (image != null) {
+        if (image == null) {
             return ResponseEntity.badRequest().build();
         }
 

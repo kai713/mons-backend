@@ -81,7 +81,7 @@ public class Utils {
         productDTO.setPrice(product.getPrice());
         productDTO.setImageUrl(product.getImageUrl());
 
-        if(product.getCategory() != null) {
+        if (product.getCategory() != null) {
             productDTO.setCategoryId(product.getCategory().getId());
         }
 
@@ -99,17 +99,21 @@ public class Utils {
         return cartDTO;
     }
 
+    //TODO: refactor
     public static List<CartDTO> mapCartListEntityToCartListDTO(List<Cart> cartList) {
         return cartList.stream()
                 .map(Utils::mapCartEntityToCartDTO)
                 .collect(Collectors.toList());
     }
 
+    //TODO: !!! refactor mappers related cart due to N+1 (maybe also with orders mappers)
     public static CartItemDTO mapCartItemEntityToDTO(CartItem cartItem) {
         CartItemDTO dto = new CartItemDTO();
         dto.setId(cartItem.getId());
         dto.setProductId(cartItem.getProduct().getId());
-        dto.setProductName(cartItem.getProduct().getName());
+        dto.setProductName(cartItem.getProductName());
+        dto.setQuantity(cartItem.getQuantity());
+        dto.setImageUrl(cartItem.getImageUrl());
         dto.setProductPrice(cartItem.getProduct().getPrice());
         dto.setQuantity(cartItem.getQuantity());
         return dto;

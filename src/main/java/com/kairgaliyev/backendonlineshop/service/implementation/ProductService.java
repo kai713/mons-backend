@@ -65,8 +65,8 @@ public class ProductService implements IProductService {
         try {
             String imageUrl = awsS3Service.saveImageToS3(photo);
 
-            //TODO findByName and do name attribute unique
-            Product existingProduct = productRepository.findById(Long.parseLong(productDTO.getId().toString()))
+            //TODO findByName and do name attribute unique or get id from front
+            Product existingProduct = productRepository.findByName(productDTO.getName())
                     .orElseThrow(() -> new MyException("product not found"));
 
             //TODO create method map method in util / ModelMapper

@@ -15,9 +15,12 @@ import java.io.Serializable;
 public class CartItemDTO implements Serializable {
     private Long id;
     private Long productId;
+    private int quantity;
+
+    //TODO: refactor neednt attributes
     private String productName;
     private Double productPrice;
-    private int quantity;
+    private String imageUrl;
 
     public CartItemDTO(CartItem cartItem) {
         this.id = cartItem.getId();

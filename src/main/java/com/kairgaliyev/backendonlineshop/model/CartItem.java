@@ -28,9 +28,16 @@ public class CartItem {
 
     private int quantity;
 
-    public CartItem(Cart cart, Product product, int quantity) {
+    private String productName;
+    private Double productPrice;
+    private String imageUrl;
+
+    public CartItem(Cart cart, Product product, int quantity, String productName, Double productPrice, String imageUrl) {
         this.cart = cart;
         this.product = product;
         this.quantity = quantity;
+        this.productName = productName;
+        this.productPrice = productPrice;
+        this.imageUrl = imageUrl;
     }
 }
