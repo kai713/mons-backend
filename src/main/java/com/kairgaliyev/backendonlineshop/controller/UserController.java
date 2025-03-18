@@ -7,6 +7,7 @@ import com.kairgaliyev.backendonlineshop.enums.UserRole;
 import com.kairgaliyev.backendonlineshop.service.implementation.UserService;
 import com.kairgaliyev.backendonlineshop.service.intreface.IUserService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -17,10 +18,10 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/users")
 @RequiredArgsConstructor
+@Slf4j
 public class UserController {
 
     private final IUserService iUserService;
-    private final UserService userService;
 
     @GetMapping("/all")
     @PreAuthorize("hasAuthority('ADMIN')")
@@ -51,6 +52,7 @@ public class UserController {
 
     @GetMapping("/get-logged-in-profile-info")
     public ResponseEntity<Response> getLoggedInUserProfile(@RequestAttribute("userId") Long userId) {
+        log.info("Get logged in user profile info for user id {}", userId);
         Response response = iUserService.getMyInfo(userId);
         return ResponseEntity.status(response.getStatusCode()).body(response);
     }

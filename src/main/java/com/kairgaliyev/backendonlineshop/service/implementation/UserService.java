@@ -1,5 +1,6 @@
 package com.kairgaliyev.backendonlineshop.service.implementation;
 
+import com.kairgaliyev.backendonlineshop.dto.AuthResponse;
 import com.kairgaliyev.backendonlineshop.dto.LoginRequest;
 import com.kairgaliyev.backendonlineshop.dto.Response;
 import com.kairgaliyev.backendonlineshop.dto.UserDTO;
@@ -13,8 +14,11 @@ import com.kairgaliyev.backendonlineshop.service.intreface.IUserService;
 import com.kairgaliyev.backendonlineshop.utils.JWTUtils;
 import com.kairgaliyev.backendonlineshop.utils.Utils;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -22,6 +26,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class UserService implements IUserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
@@ -65,36 +70,20 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public Response login(LoginRequest loginRequest) {
+    public AuthResponse login(LoginRequest request) {
+        Authentication authentication = new UsernamePasswordAuthenticationToken(
+                request.getEmail(), request.getPassword());
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        var user = userRepository.findByEmail(request.getEmail())
+                .orElseThrow(() -> new MyException("User not found"));
 
-        Response response = new Response();
+        String accessToken = jwtUtils.generateToken(user);
+        var refreshToken = refreshTokenService.createRefreshToken(user.getEmail());
 
-        try {
-            //check user from db and generate token
-            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword()));
-            var user = userRepository.findByEmail(loginRequest.getEmail()).orElseThrow(() -> new MyException("user Not found"));
-
-            var token = jwtUtils.generateToken(user);
-            var refreshToken = refreshTokenService.createRefreshToken(user.getEmail());
-
-            //build response
-            response.setStatusCode(200);
-            response.setToken(token);
-            response.setRefreshToken(refreshToken.getToken()); // Добавляем refresh token
-            response.setRole(user.getRole().toString());
-            response.setExpirationTime("1 hour");
-            response.setMessage("successful");
-
-        } catch (MyException e) {
-            response.setStatusCode(404);
-            response.setMessage(e.getMessage());
-
-        } catch (Exception e) {
-
-            response.setStatusCode(500);
-            response.setMessage("Error Occurred During USer Login " + e.getMessage());
-        }
-        return response;
+        return AuthResponse.builder()
+                .accessToken(accessToken)
+                .refreshToken(refreshToken.getToken())
+                .build();
     }
 
     @Override
@@ -212,6 +201,7 @@ public class UserService implements IUserService {
             response.setStatusCode(500);
             response.setMessage("Error getting all users " + e.getMessage());
         }
+        log.info("getMyInfo service user: {}", response);
         return response;
     }
 

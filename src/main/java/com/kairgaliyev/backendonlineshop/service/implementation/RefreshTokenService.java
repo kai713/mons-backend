@@ -36,10 +36,6 @@ public class RefreshTokenService implements IRefreshTokenService {
         return refreshTokenRepository.findByToken(token);
     }
 
-    public void deleteRefreshToken(String token) {
-        refreshTokenRepository.findByToken(token).ifPresent(refreshTokenRepository::delete);
-    }
-
     public boolean validateRefreshToken(RefreshToken token) {
         return token.getExpiryDate().isAfter(Instant.now());
     }

@@ -10,6 +10,4 @@ public interface IRefreshTokenService {
     Optional<RefreshToken> findByToken(String token);
 
     boolean validateRefreshToken(RefreshToken token);
-
-    void deleteRefreshToken(String token);
 }

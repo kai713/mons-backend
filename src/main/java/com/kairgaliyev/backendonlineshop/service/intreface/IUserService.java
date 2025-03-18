@@ -1,5 +1,6 @@
 package com.kairgaliyev.backendonlineshop.service.intreface;
 
+import com.kairgaliyev.backendonlineshop.dto.AuthResponse;
 import com.kairgaliyev.backendonlineshop.dto.LoginRequest;
 import com.kairgaliyev.backendonlineshop.dto.Response;
 import com.kairgaliyev.backendonlineshop.dto.UserDTO;
@@ -9,7 +10,7 @@ import com.kairgaliyev.backendonlineshop.model.User;
 public interface IUserService {
     Response register(User user);
 
-    Response login(LoginRequest loginRequest);
+    AuthResponse login(LoginRequest loginRequest);
 
     Response getAllUsers();
 
