@@ -14,4 +14,3 @@ public class OrderItemDTO implements Serializable {
     private int quantity;
     private double productPrice;
 }
-

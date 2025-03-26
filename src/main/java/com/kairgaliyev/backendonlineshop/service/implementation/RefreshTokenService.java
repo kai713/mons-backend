@@ -27,7 +27,7 @@ public class RefreshTokenService implements IRefreshTokenService {
         RefreshToken refreshToken = new RefreshToken();
         refreshToken.setUser(user);
         refreshToken.setToken(UUID.randomUUID().toString());
-        refreshToken.setExpiryDate(Instant.now().plus(7, ChronoUnit.DAYS));
+        refreshToken.setExpiryDate(Instant.now().plus(5, ChronoUnit.MINUTES));
 
         return refreshTokenRepository.save(refreshToken);
     }
@@ -38,6 +38,10 @@ public class RefreshTokenService implements IRefreshTokenService {
 
     public boolean validateRefreshToken(RefreshToken token) {
         return token.getExpiryDate().isAfter(Instant.now());
+    }
+
+    public void invalidateRefreshToken(String tokenValue) {
+        refreshTokenRepository.deleteByToken(tokenValue);
     }
 }
 

@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 @RestController
-@RequestMapping("/product")
+@RequestMapping("/v1/product")
 @RequiredArgsConstructor
 public class ProductController {
 

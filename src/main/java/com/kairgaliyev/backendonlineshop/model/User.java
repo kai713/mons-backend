@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.kairgaliyev.backendonlineshop.enums.UserRole;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import lombok.ToString;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -14,6 +15,7 @@ import java.util.Collection;
 import java.util.List;
 
 @Entity
+@ToString
 @Table(name = "users")
 public class User implements UserDetails {
 

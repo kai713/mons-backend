@@ -5,13 +5,12 @@ import com.kairgaliyev.backendonlineshop.dto.Response;
 import com.kairgaliyev.backendonlineshop.exception.MyException;
 import com.kairgaliyev.backendonlineshop.model.Product;
 import com.kairgaliyev.backendonlineshop.repository.ProductRepository;
-import com.kairgaliyev.backendonlineshop.service.AwsS3Service;
+import com.kairgaliyev.backendonlineshop.service.aws.AwsS3Service;
 import com.kairgaliyev.backendonlineshop.service.intreface.IProductService;
 import com.kairgaliyev.backendonlineshop.utils.Utils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.Duration;

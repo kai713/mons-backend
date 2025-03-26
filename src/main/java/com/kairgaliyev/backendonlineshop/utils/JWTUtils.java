@@ -3,6 +3,8 @@ package com.kairgaliyev.backendonlineshop.utils;
 import com.kairgaliyev.backendonlineshop.model.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
+import jakarta.annotation.PostConstruct;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
@@ -15,24 +17,24 @@ import java.util.function.Function;
 
 @Service
 public class JWTUtils {
-    private static final long EXPIRATION_TIME = 1000 * 60; // 1 час
+    private static final long EXPIRATION_TIME = 1000 * 30;
+    private SecretKey key;
+    @Value("${spring.secret.string}")
+    private String secretString;
 
-    private final SecretKey Key;
-
-    public JWTUtils() {
-        // TODO: Использовать .env файл для хранения секрета
-        String secretString = "843567893696976453275974432697R634976R738467TR678T34865R6834R8763T478378637664538745673865783678548735687R3";
+    @PostConstruct
+    private void init() {
         byte[] keyBytes = Base64.getDecoder().decode(secretString.getBytes(StandardCharsets.UTF_8));
-        this.Key = new SecretKeySpec(keyBytes, "HmacSHA256");
+        this.key = new SecretKeySpec(keyBytes, "HmacSHA256");
     }
 
     public String generateToken(User user) {
         return Jwts.builder()
-                .subject(user.getEmail()) // email в subject
-                .claim("userId", user.getId()) // Добавляем userId в claims
+                .subject(user.getEmail()) //adding email in subject
+                .claim("userId", user.getId()) //adding userId in claims
                 .issuedAt(new Date(System.currentTimeMillis()))
                 .expiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
-                .signWith(Key)
+                .signWith(key)
                 .compact();
     }
 
@@ -45,7 +47,7 @@ public class JWTUtils {
     }
 
     private <T> T extractClaims(String token, Function<Claims, T> claimsTFunction) {
-        return claimsTFunction.apply(Jwts.parser().verifyWith(Key).build().parseSignedClaims(token).getPayload());
+        return claimsTFunction.apply(Jwts.parser().verifyWith(key).build().parseSignedClaims(token).getPayload());
     }
 
     public boolean isValidToken(String token, UserDetails userDetails) {

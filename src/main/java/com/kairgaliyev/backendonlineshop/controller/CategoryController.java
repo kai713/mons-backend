@@ -10,7 +10,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/category")
+@RequestMapping("/v1/category")
 @RequiredArgsConstructor
 public class CategoryController {
 

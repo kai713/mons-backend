@@ -16,7 +16,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/users")
+@RequestMapping("/v1/users")
 @RequiredArgsConstructor
 @Slf4j
 public class UserController {

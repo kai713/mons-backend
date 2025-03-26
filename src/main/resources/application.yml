@@ -1,0 +1,39 @@
+spring:
+  application:
+    name: BackendOnlineShop
+
+  datasource:
+    url: jdbc:mysql://localhost:3308/OnlineShopBackend?serverTimezone=UTC
+    username: root
+    password: mysql
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+    baseline-on-migrate: true
+
+  data:
+    redis:
+      host: localhost
+      port: 6381
+      password: password
+
+  cache:
+    type: redis
+
+  aws:
+    s3:
+      bucket-name: backendonlineshop
+      access:
+        key: ${AWS_ACCESS_KEY}
+      secret:
+        key: ${AWS_SECRET_KEY}
+
+  secret:
+    string: 843567893696976453275974432697R634976R738467TR678T34865R6834R8763T478378637664538745673865783678548735687R3

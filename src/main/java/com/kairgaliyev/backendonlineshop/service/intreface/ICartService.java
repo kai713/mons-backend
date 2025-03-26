@@ -1,16 +1,18 @@
 package com.kairgaliyev.backendonlineshop.service.intreface;
 
-import com.kairgaliyev.backendonlineshop.dto.Response;
+import com.kairgaliyev.backendonlineshop.dto.CartDTO;
+import com.kairgaliyev.backendonlineshop.dto.CartItemDTO;
+import com.kairgaliyev.backendonlineshop.dto.IResponse;
 
 public interface ICartService {
 
-    Response getCartById(Long userId);
+    CartDTO getCartById(Long userId);
 
-    Response addProduct(Long userId, Long productId, int quantity);
+    CartItemDTO addProduct(Long userId, Long productId, int quantity);
 
-    Response removeProduct(Long userId, Long productId);
+    IResponse removeProduct(Long userId, Long productId);
 
-    void clearCart(Long userId);
+    IResponse clearCart(Long userId);
 
-    Response updateProductQuantity(Long userId, Long productId, int quantity);
+    CartItemDTO updateProductQuantity(Long userId, Long productId, int quantity);
 }
