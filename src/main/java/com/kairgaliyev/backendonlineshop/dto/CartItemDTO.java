@@ -1,6 +1,6 @@
 package com.kairgaliyev.backendonlineshop.dto;
 
-import com.kairgaliyev.backendonlineshop.model.CartItem;
+import com.kairgaliyev.backendonlineshop.entity.CartItemEntity;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -22,7 +22,7 @@ public class CartItemDTO implements Serializable {
     private Double productPrice;
     private String imageUrl;
 
-    public CartItemDTO(CartItem cartItem) {
+    public CartItemDTO(CartItemEntity cartItem) {
         this.id = cartItem.getId();
         this.productId = cartItem.getProduct().getId();
         this.productName = cartItem.getProduct().getName();

@@ -1,4 +1,4 @@
-package com.kairgaliyev.backendonlineshop.model;
+package com.kairgaliyev.backendonlineshop.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -9,18 +9,21 @@ import java.time.Instant;
 @Entity
 @Getter
 @Setter
-public class RefreshToken {
+@Table(name = "refresh_token")
+public class RefreshTokenEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", nullable = false)
     private Long id;
 
-    @Column(nullable = false, unique = true)
+    @Column(name = "token", nullable = false)
     private String token;
 
     @OneToOne
     @JoinColumn(name = "user_id", referencedColumnName = "id")
-    private User user;
+    private UserEntity user;
 
+    @Column(name = "expiry_date")
     private Instant expiryDate;
 }
 

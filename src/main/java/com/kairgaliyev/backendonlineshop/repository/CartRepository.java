@@ -1,6 +1,6 @@
 package com.kairgaliyev.backendonlineshop.repository;
 
-import com.kairgaliyev.backendonlineshop.model.Cart;
+import com.kairgaliyev.backendonlineshop.entity.CartEntity;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository
-public interface CartRepository extends JpaRepository<Cart, Long> {
+public interface CartRepository extends JpaRepository<CartEntity, Long> {
     @EntityGraph(attributePaths = {"cartItems.product", "user"})
 
 //    SELECT c.*, ci.*, p.*, u.*
@@ -18,5 +18,5 @@ public interface CartRepository extends JpaRepository<Cart, Long> {
 //JOIN users u ON c.user_id = u.id
 //WHERE c.user_id = ?
 
-    Optional<Cart> findByUserId(Long userId);
+    Optional<CartEntity> findByUserId(Long userId);
 }

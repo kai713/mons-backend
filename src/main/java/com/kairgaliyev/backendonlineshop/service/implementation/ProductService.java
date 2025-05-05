@@ -2,12 +2,11 @@ package com.kairgaliyev.backendonlineshop.service.implementation;
 
 import com.kairgaliyev.backendonlineshop.dto.ProductDTO;
 import com.kairgaliyev.backendonlineshop.dto.Response;
+import com.kairgaliyev.backendonlineshop.entity.ProductEntity;
 import com.kairgaliyev.backendonlineshop.exception.MyException;
-import com.kairgaliyev.backendonlineshop.model.Product;
 import com.kairgaliyev.backendonlineshop.repository.ProductRepository;
 import com.kairgaliyev.backendonlineshop.service.aws.AwsS3Service;
 import com.kairgaliyev.backendonlineshop.service.intreface.IProductService;
-import com.kairgaliyev.backendonlineshop.utils.Utils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
@@ -35,12 +34,12 @@ public class ProductService implements IProductService {
         try {
             String imageUrl = awsS3Service.saveImageToS3(photo);
 
-            Product newProduct = new Product();
+            ProductEntity newProduct = new ProductEntity();
             newProduct.setName(productDTO.getName());
             newProduct.setDescription(productDTO.getDescription());
             newProduct.setPrice(productDTO.getPrice());
             newProduct.setStockQuantity(productDTO.getStock());
-            newProduct.setImageUrl(imageUrl);
+            newProduct.setImageURL(imageUrl);
 
             productRepository.save(newProduct);
 
@@ -65,7 +64,7 @@ public class ProductService implements IProductService {
             String imageUrl = awsS3Service.saveImageToS3(photo);
 
             //TODO findByName and do name attribute unique or get id from front
-            Product existingProduct = productRepository.findByName(productDTO.getName())
+            ProductEntity existingProduct = productRepository.findByName(productDTO.getName())
                     .orElseThrow(() -> new MyException("product not found"));
 
             //TODO create method map method in util / ModelMapper
@@ -74,7 +73,7 @@ public class ProductService implements IProductService {
             existingProduct.setPrice(productDTO.getPrice());
             existingProduct.setId(productDTO.getId());
             existingProduct.setStockQuantity(productDTO.getStock());
-            existingProduct.setImageUrl(imageUrl);
+            existingProduct.setImageURL(imageUrl);
 
             productRepository.save(existingProduct);
 
@@ -103,8 +102,8 @@ public class ProductService implements IProductService {
         Response response = new Response();
 
         try {
-            Product existingProduct = productRepository.findById(Long.valueOf(productId)).orElseThrow(() -> new MyException("product not found"));
-            response.setProduct(Utils.mapProductEntityToProductDTO(existingProduct));
+            ProductEntity existingProduct = productRepository.findById(Long.valueOf(productId)).orElseThrow(() -> new MyException("product not found"));
+//            response.setProduct(Utils.mapProductEntityToProductDTO(existingProduct));
 
             productRepository.delete(existingProduct);
 
@@ -139,8 +138,8 @@ public class ProductService implements IProductService {
                 response.setProductList(productDTOList);
             }
 
-            List<Product> productList = productRepository.findAll();
-            productDTOList = Utils.mapProductListEntityToProductListDTO(productList);
+            List<ProductEntity> productList = productRepository.findAll();
+//            productDTOList = Utils.mapProductListEntityToProductListDTO(productList);
             response.setStatusCode(200);
             response.setMessage("successful");
             response.setProductList(productDTOList);
@@ -169,12 +168,12 @@ public class ProductService implements IProductService {
                 return response;
             }
 
-            Product searchProduct = productRepository.findById(Long.parseLong(productId)).orElseThrow(() -> new MyException("product not found"));
+            ProductEntity searchProduct = productRepository.findById(Long.parseLong(productId)).orElseThrow(() -> new MyException("product not found"));
 
-            ProductDTO productDTO = Utils.mapProductEntityToProductDTO(searchProduct);
+//            ProductDTO productDTO = Utils.mapProductEntityToProductDTO(searchProduct);
 
-            redisTemplate.opsForValue().set(cacheKey, productDTO, Duration.ofMinutes(10));
-            response.setProduct(productDTO);
+//            redisTemplate.opsForValue().set(cacheKey, productDTO, Duration.ofMinutes(10));
+//            response.setProduct(productDTO);
 
             response.setStatusCode(200);
             response.setMessage("successful");
@@ -195,17 +194,17 @@ public class ProductService implements IProductService {
         Response response = new Response();
 
         try {
-            List<Product> products = productRepository.findByNameContainingOrDescriptionContaining(input, input);
+            List<ProductEntity> products = productRepository.findByNameContainingOrDescriptionContaining(input, input);
 
             if (products.isEmpty()) {
                 throw new MyException("products not found");
             }
 
-            List<ProductDTO> productDTOList = Utils.mapProductListEntityToProductListDTO(products);
+//            List<ProductDTO> productDTOList = Utils.mapProductListEntityToProductListDTO(products);
 
             response.setStatusCode(200);
             response.setMessage("successful");
-            response.setProductList(productDTOList);
+//            response.setProductList(productDTOList);
 
         } catch (MyException e) {
             response.setStatusCode(404);

@@ -4,15 +4,14 @@ import com.kairgaliyev.backendonlineshop.dto.AuthResponse;
 import com.kairgaliyev.backendonlineshop.dto.LoginRequest;
 import com.kairgaliyev.backendonlineshop.dto.Response;
 import com.kairgaliyev.backendonlineshop.dto.UserDTO;
+import com.kairgaliyev.backendonlineshop.entity.CartEntity;
+import com.kairgaliyev.backendonlineshop.entity.UserEntity;
 import com.kairgaliyev.backendonlineshop.enums.UserRole;
 import com.kairgaliyev.backendonlineshop.exception.MyException;
-import com.kairgaliyev.backendonlineshop.model.Cart;
-import com.kairgaliyev.backendonlineshop.model.User;
 import com.kairgaliyev.backendonlineshop.repository.CartRepository;
 import com.kairgaliyev.backendonlineshop.repository.UserRepository;
 import com.kairgaliyev.backendonlineshop.service.intreface.IUserService;
 import com.kairgaliyev.backendonlineshop.utils.JWTUtils;
-import com.kairgaliyev.backendonlineshop.utils.Utils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -36,7 +35,7 @@ public class UserService implements IUserService {
     private final RefreshTokenService refreshTokenService;
 
     @Override
-    public Response register(User user) {
+    public Response register(UserEntity user) {
         Response response = new Response();
         try {
             //check if user already co not have role
@@ -49,16 +48,16 @@ public class UserService implements IUserService {
             }
             //build response and userDTO
             user.setPassword(passwordEncoder.encode(user.getPassword()));
-            User savedUser = userRepository.save(user);
-            UserDTO userDTO = Utils.mapUserEntityToUserDTO(savedUser);
+            UserEntity savedUser = userRepository.save(user);
+//            UserDTO userDTO = Utils.mapUserEntityToUserDTO(savedUser);
             response.setStatusCode(200);
-            response.setUser(userDTO);
+//            response.setUser(userDTO);
 
             //Cart part
-            Cart cart = new Cart();
+            CartEntity cart = new CartEntity();
             cart.setUser(user);
 
-            cartRepository.save(cart);
+//            cartRepository.save(cart);
         } catch (MyException e) {
             response.setStatusCode(400);
             response.setMessage(e.getMessage());
@@ -77,11 +76,11 @@ public class UserService implements IUserService {
         var user = userRepository.findByEmail(request.getEmail())
                 .orElseThrow(() -> new MyException("User not found"));
 
-        String accessToken = jwtUtils.generateToken(user);
+//        String accessToken = jwtUtils.generateToken(user);
         var refreshToken = refreshTokenService.createRefreshToken(user.getEmail());
 
         return AuthResponse.builder()
-                .accessToken(accessToken)
+//                .accessToken(accessToken)
                 .refreshToken(refreshToken.getToken())
                 .build();
     }
@@ -91,11 +90,11 @@ public class UserService implements IUserService {
 
         Response response = new Response();
         try {
-            List<User> userList = userRepository.findAll();
-            List<UserDTO> userDTOList = Utils.mapUserListEntityToUserListDTO(userList);
+            List<UserEntity> userList = userRepository.findAll();
+//            List<UserDTO> userDTOList = Utils.mapUserListEntityToUserListDTO(userList);
             response.setStatusCode(200);
             response.setMessage("successful");
-            response.setUserList(userDTOList);
+//            response.setUserList(userDTOList);
 
         } catch (Exception e) {
             response.setStatusCode(500);
@@ -109,12 +108,12 @@ public class UserService implements IUserService {
         Response response = new Response();
 
         try {
-            User existingUser = userRepository.findById(Long.valueOf(userId))
+            UserEntity existingUser = userRepository.findById(Long.valueOf(userId))
                     .orElseThrow(() -> new MyException("user Not found"));
 
-            //TODO create method map method in util
+            //TODO convert by mapstruct
             if (userDTO.getEmail() != null) existingUser.setEmail(userDTO.getEmail());
-            if (userDTO.getPhoneNumber() != null) existingUser.setPhoneNumber(userDTO.getPhoneNumber());
+//            if (userDTO.getPhoneNumber() != null) existingUser.setPhoneNumber(userDTO.getPhoneNumber());
             if (userDTO.getName() != null) existingUser.setName(userDTO.getName());
             if (userDTO.getRole() != null) existingUser.setRole(userDTO.getRole());
 
@@ -163,11 +162,11 @@ public class UserService implements IUserService {
         Response response = new Response();
 
         try {
-            User user = userRepository.findById(Long.valueOf(userId)).orElseThrow(() -> new MyException("User Not Found"));
-            UserDTO userDTO = Utils.mapUserEntityToUserDTO(user);
+            UserEntity user = userRepository.findById(Long.valueOf(userId)).orElseThrow(() -> new MyException("User Not Found"));
+//            UserDTO userDTO = Utils.mapUserEntityToUserDTO(user);
             response.setStatusCode(200);
             response.setMessage("successful");
-            response.setUser(userDTO);
+//            response.setUser(userDTO);
 
         } catch (MyException e) {
             response.setStatusCode(404);
@@ -186,11 +185,11 @@ public class UserService implements IUserService {
         Response response = new Response();
 
         try {
-            User user = userRepository.findById(userId).orElseThrow(() -> new MyException("User Not Found"));
-            UserDTO userDTO = Utils.mapUserEntityToUserDTO(user);
+            UserEntity user = userRepository.findById(userId).orElseThrow(() -> new MyException("User Not Found"));
+//            UserDTO userDTO = Utils.mapUserEntityToUserDTO(user);
             response.setStatusCode(200);
             response.setMessage("successful");
-            response.setUser(userDTO);
+//            response.setUser(userDTO);
 
         } catch (MyException e) {
             response.setStatusCode(404);
@@ -210,13 +209,13 @@ public class UserService implements IUserService {
         Response response = new Response();
 
         try {
-            User user = userRepository.findById(Long.valueOf(userId)).orElseThrow(() -> new MyException("User Not Found"));
-            UserDTO userDTO = Utils.mapUserEntityToUserDTO(user);
+            UserEntity user = userRepository.findById(Long.valueOf(userId)).orElseThrow(() -> new MyException("User Not Found"));
+//            UserDTO userDTO = Utils.mapUserEntityToUserDTO(user);
             user.setRole(role);
             userRepository.save(user);
             response.setStatusCode(200);
             response.setMessage("successful");
-            response.setUser(userDTO);
+//            response.setUser(userDTO);
 
         } catch (MyException e) {
             response.setStatusCode(404);

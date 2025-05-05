@@ -10,6 +10,7 @@ import org.springframework.web.servlet.HandlerInterceptor;
 
 import java.util.Locale;
 
+//TODO: переделать логику, проверить получаем ли мы куки с языком перед запросом на сервер?
 @Component
 @Slf4j
 public class LocaleInterceptor implements HandlerInterceptor {

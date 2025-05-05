@@ -3,7 +3,7 @@ package com.kairgaliyev.backendonlineshop.controller;
 import com.kairgaliyev.backendonlineshop.dto.AuthResponse;
 import com.kairgaliyev.backendonlineshop.dto.LoginRequest;
 import com.kairgaliyev.backendonlineshop.dto.Response;
-import com.kairgaliyev.backendonlineshop.model.User;
+import com.kairgaliyev.backendonlineshop.entity.UserEntity;
 import com.kairgaliyev.backendonlineshop.service.intreface.IRefreshTokenService;
 import com.kairgaliyev.backendonlineshop.service.intreface.IUserService;
 import com.kairgaliyev.backendonlineshop.utils.JWTUtils;
@@ -33,7 +33,7 @@ public class AuthController {
 
     //TODO UserRequest
     @PostMapping("/register")
-    public ResponseEntity<Response> register(@RequestBody User user) {
+    public ResponseEntity<Response> register(@RequestBody UserEntity user) {
         log.info("Registering user: {}", user);
         Response response = userService.register(user);
         return ResponseEntity.status(response.getStatusCode()).body(response);
@@ -71,11 +71,11 @@ public class AuthController {
         return refreshTokenService.findByToken(refreshToken)
                 .filter(refreshTokenService::validateRefreshToken)
                 .map(token -> {
-                    User user = token.getUser();
-                    String newAccessToken = jwtUtils.generateToken(user);
+                    UserEntity user = token.getUser();
+//                    String newAccessToken = jwtUtils.generateToken(user);
 
                     return ResponseEntity.ok()
-                            .body(Map.of("accessToken", newAccessToken));
+                            .body(Map.of("accessToken", null));
                 })
                 .orElseGet(() -> ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                         .body(Map.of("error", "Invalid refresh token")));

@@ -1,7 +1,7 @@
 package com.kairgaliyev.backendonlineshop.service.intreface;
 
 import com.kairgaliyev.backendonlineshop.dto.Response;
-import com.kairgaliyev.backendonlineshop.model.Category;
+import com.kairgaliyev.backendonlineshop.entity.CategoryEntity;
 
 public interface ICategoryService {
 
@@ -9,7 +9,7 @@ public interface ICategoryService {
 
     Response getCategoryById(Long id);
 
-    Response createCategory(Category category);
+    Response createCategory(CategoryEntity category);
 
     Response deleteCategory(Long id);
 

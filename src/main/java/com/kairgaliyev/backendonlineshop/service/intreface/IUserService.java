@@ -4,11 +4,11 @@ import com.kairgaliyev.backendonlineshop.dto.AuthResponse;
 import com.kairgaliyev.backendonlineshop.dto.LoginRequest;
 import com.kairgaliyev.backendonlineshop.dto.Response;
 import com.kairgaliyev.backendonlineshop.dto.UserDTO;
+import com.kairgaliyev.backendonlineshop.entity.UserEntity;
 import com.kairgaliyev.backendonlineshop.enums.UserRole;
-import com.kairgaliyev.backendonlineshop.model.User;
 
 public interface IUserService {
-    Response register(User user);
+    Response register(UserEntity user);
 
     AuthResponse login(LoginRequest loginRequest);
 

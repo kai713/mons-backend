@@ -1,6 +1,6 @@
 package com.kairgaliyev.backendonlineshop.dto;
 
-import com.kairgaliyev.backendonlineshop.model.Product;
+import com.kairgaliyev.backendonlineshop.entity.ProductEntity;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -15,5 +15,5 @@ public class CategoryDTO implements Serializable {
 
     private String name;
 
-    private List<Product> products = new ArrayList<>();
+    private List<ProductEntity> products = new ArrayList<>();
 }

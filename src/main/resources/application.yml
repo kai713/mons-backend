@@ -3,15 +3,22 @@ spring:
     name: BackendOnlineShop
 
   datasource:
-    url: jdbc:mysql://localhost:3308/OnlineShopBackend?serverTimezone=UTC
-    username: root
-    password: mysql
-    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:postgresql://localhost:5433/ONS-postgres
+    username: postgres
+    password: postgres
+    driver-class-name: org.postgresql.Driver
 
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: validate
     show-sql: true
+    properties:
+      hibernate.format_sql: true
+      hibernate.use_sql_comments: true
+      logging:
+        level:
+          org.hibernate.SQL: DEBUG
+          org.hibernate.type.descriptor.sql.BasicBinder: TRACE
 
   flyway:
     enabled: true
@@ -31,9 +38,9 @@ spring:
     s3:
       bucket-name: backendonlineshop
       access:
-        key: ${AWS_ACCESS_KEY}
+        key: ${AWS_ACCESS_KEY:}
       secret:
-        key: ${AWS_SECRET_KEY}
+        key: ${AWS_SECRET_KEY:}
 
   secret:
-    string: 843567893696976453275974432697R634976R738467TR678T34865R6834R8763T478378637664538745673865783678548735687R3
+    string: ${SECRET_STRING:}

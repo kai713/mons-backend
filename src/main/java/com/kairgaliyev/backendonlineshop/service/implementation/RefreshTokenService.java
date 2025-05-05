@@ -1,7 +1,7 @@
 package com.kairgaliyev.backendonlineshop.service.implementation;
 
-import com.kairgaliyev.backendonlineshop.model.RefreshToken;
-import com.kairgaliyev.backendonlineshop.model.User;
+import com.kairgaliyev.backendonlineshop.entity.RefreshTokenEntity;
+import com.kairgaliyev.backendonlineshop.entity.UserEntity;
 import com.kairgaliyev.backendonlineshop.repository.RefreshTokenRepository;
 import com.kairgaliyev.backendonlineshop.repository.UserRepository;
 import com.kairgaliyev.backendonlineshop.service.intreface.IRefreshTokenService;
@@ -19,24 +19,24 @@ public class RefreshTokenService implements IRefreshTokenService {
     private final RefreshTokenRepository refreshTokenRepository;
     private final UserRepository userRepository;
 
-    public RefreshToken createRefreshToken(String email) {
-        User user = userRepository.findByEmail(email).orElseThrow();
+    public RefreshTokenEntity createRefreshToken(String email) {
+        UserEntity user = userRepository.findByEmail(email).orElseThrow();
 
         refreshTokenRepository.findByUser(user).ifPresent(refreshTokenRepository::delete);
 
-        RefreshToken refreshToken = new RefreshToken();
-        refreshToken.setUser(user);
-        refreshToken.setToken(UUID.randomUUID().toString());
-        refreshToken.setExpiryDate(Instant.now().plus(5, ChronoUnit.MINUTES));
+        RefreshTokenEntity refreshTokenEntity = new RefreshTokenEntity();
+        refreshTokenEntity.setUser(user);
+        refreshTokenEntity.setToken(UUID.randomUUID().toString());
+        refreshTokenEntity.setExpiryDate(Instant.now().plus(5, ChronoUnit.MINUTES));
 
-        return refreshTokenRepository.save(refreshToken);
+        return refreshTokenRepository.save(refreshTokenEntity);
     }
 
-    public Optional<RefreshToken> findByToken(String token) {
+    public Optional<RefreshTokenEntity> findByToken(String token) {
         return refreshTokenRepository.findByToken(token);
     }
 
-    public boolean validateRefreshToken(RefreshToken token) {
+    public boolean validateRefreshToken(RefreshTokenEntity token) {
         return token.getExpiryDate().isAfter(Instant.now());
     }
 

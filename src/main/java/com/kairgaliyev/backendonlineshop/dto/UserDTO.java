@@ -2,7 +2,7 @@ package com.kairgaliyev.backendonlineshop.dto;
 
 
 import com.kairgaliyev.backendonlineshop.enums.UserRole;
-import com.kairgaliyev.backendonlineshop.model.Order;
+import com.kairgaliyev.backendonlineshop.entity.OrderEntity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import lombok.Getter;
@@ -25,5 +25,5 @@ public class UserDTO implements Serializable {
     @Enumerated(EnumType.STRING)
     private UserRole role;
 
-    private List<Order> orders = new ArrayList<>();
+    private List<OrderEntity> orderEntities = new ArrayList<>();
 }

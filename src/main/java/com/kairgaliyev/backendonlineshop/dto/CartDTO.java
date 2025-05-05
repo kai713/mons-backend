@@ -1,6 +1,6 @@
 package com.kairgaliyev.backendonlineshop.dto;
 
-import com.kairgaliyev.backendonlineshop.model.Cart;
+import com.kairgaliyev.backendonlineshop.entity.CartEntity;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,10 +18,10 @@ public class CartDTO implements Serializable {
     private Long id;
     private List<CartItemDTO> cartItems;
 
-    public CartDTO(Cart cart) {
+    public CartDTO(CartEntity cart) {
         this.id = cart.getId();
-        this.cartItems = cart.getCartItems().stream()
-                .map(CartItemDTO::new)
-                .collect(Collectors.toList());
+//        this.cartItems = cart.getCartItems().stream()
+//                .map(CartItemDTO::new)
+//                .collect(Collectors.toList());
     }
 }

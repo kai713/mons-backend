@@ -1,6 +1,6 @@
 package com.kairgaliyev.backendonlineshop.utils;
 
-import com.kairgaliyev.backendonlineshop.model.User;
+import com.kairgaliyev.backendonlineshop.entity.UserEntity;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import jakarta.annotation.PostConstruct;
@@ -28,7 +28,7 @@ public class JWTUtils {
         this.key = new SecretKeySpec(keyBytes, "HmacSHA256");
     }
 
-    public String generateToken(User user) {
+    public String generateToken(UserEntity user) {
         return Jwts.builder()
                 .subject(user.getEmail()) //adding email in subject
                 .claim("userId", user.getId()) //adding userId in claims

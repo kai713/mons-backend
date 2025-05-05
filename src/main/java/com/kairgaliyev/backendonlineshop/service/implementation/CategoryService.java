@@ -2,13 +2,12 @@ package com.kairgaliyev.backendonlineshop.service.implementation;
 
 import com.kairgaliyev.backendonlineshop.dto.CategoryDTO;
 import com.kairgaliyev.backendonlineshop.dto.Response;
+import com.kairgaliyev.backendonlineshop.entity.CategoryEntity;
+import com.kairgaliyev.backendonlineshop.entity.ProductEntity;
 import com.kairgaliyev.backendonlineshop.exception.MyException;
-import com.kairgaliyev.backendonlineshop.model.Category;
-import com.kairgaliyev.backendonlineshop.model.Product;
 import com.kairgaliyev.backendonlineshop.repository.CategoryRepository;
 import com.kairgaliyev.backendonlineshop.repository.ProductRepository;
 import com.kairgaliyev.backendonlineshop.service.intreface.ICategoryService;
-import com.kairgaliyev.backendonlineshop.utils.Utils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
@@ -17,22 +16,23 @@ import java.time.Duration;
 
 @Service
 @RequiredArgsConstructor
+//TODO: use IResponse and change IResponse name to Response/Message
 public class CategoryService implements ICategoryService {
 
+    private static final String CATEGORY_CACHE_KEY = "category:";
     private final CategoryRepository categoryRepository;
     private final ProductRepository productRepository;
     private final RedisTemplate<String, Object> redisTemplate;
 
-    private static final String CATEGORY_CACHE_KEY = "category:";
-
     public Response getAllCategories() {
-        Response response = new Response();
+//        Response response = new Response();
 
-        response.setMessage("successful");
-        response.setStatusCode(200);
+//        response.setMessage("successful");
+//        response.setStatusCode(200);
 
-        response.setCategoryList(Utils.mapCategoryListEntityToCategoryListDTO(categoryRepository.findAll()));
-        return response;
+//        response.setCategoryList(Utils.mapCategoryListEntityToCategoryListDTO(categoryRepository.findAll()));
+//        return response;
+        return null;
     }
 
     public Response getCategoryById(Long id) {
@@ -47,11 +47,11 @@ public class CategoryService implements ICategoryService {
                 response.setStatusCode(200);
                 response.setCategory(categoryDTO);
             }
-            Category category = categoryRepository.findById(id)
+            CategoryEntity category = categoryRepository.findById(id)
                     .orElseThrow(() -> new MyException("Категория не найдена"));
 
 
-            categoryDTO = Utils.mapCategoryEntityToCategoryDTO(category);
+//            categoryDTO = Utils.mapCategoryEntityToCategoryDTO(category);
             redisTemplate.opsForValue().set(CATEGORY_CACHE_KEY + id, categoryDTO, Duration.ofMinutes(10));
 
             response.setStatusCode(200);
@@ -69,13 +69,13 @@ public class CategoryService implements ICategoryService {
         return response;
     }
 
-    public Response createCategory(Category category) {
+    public Response createCategory(CategoryEntity category) {
         Response response = new Response();
 
-        Category category1 = categoryRepository.save(category);
+        CategoryEntity category1 = categoryRepository.save(category);
         response.setStatusCode(200);
         response.setMessage("successful");
-        response.setCategory(Utils.mapCategoryEntityToCategoryDTO(category1));
+//        response.setCategory(Utils.mapCategoryEntityToCategoryDTO(category1));
 
         return response;
     }
@@ -85,7 +85,7 @@ public class CategoryService implements ICategoryService {
         Response response = new Response();
 
         try {
-            Category category = categoryRepository.findById(id)
+            CategoryEntity category = categoryRepository.findById(id)
                     .orElseThrow(() -> new MyException("Категория не найдена"));
             categoryRepository.delete(category);
             response.setStatusCode(200);
@@ -104,8 +104,8 @@ public class CategoryService implements ICategoryService {
         Response response = new Response();
 
         try {
-            Product product = productRepository.findById(productId).orElseThrow(() -> new MyException("product not found"));
-            Category category = categoryRepository.findById(categoryId).orElseThrow(() -> new MyException("category not found"));
+            ProductEntity product = productRepository.findById(productId).orElseThrow(() -> new MyException("product not found"));
+            CategoryEntity category = categoryRepository.findById(categoryId).orElseThrow(() -> new MyException("category not found"));
 
             product.setCategory(category);
             productRepository.save(product);
@@ -114,7 +114,7 @@ public class CategoryService implements ICategoryService {
             redisTemplate.delete("product:" + productId);
             redisTemplate.delete("products");
 
-            response.setProduct(Utils.mapProductEntityToProductDTO(product));
+//            response.setProduct(Utils.mapProductEntityToProductDTO(product));
             response.setStatusCode(200);
             response.setMessage("successful");
 

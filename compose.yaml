@@ -2,7 +2,7 @@ version: '4'
 services:
   redis:
     image: redis
-    container_name: onlineShopBackend-redis
+    container_name: ONS-redis
     ports:
       - "6381:6379"
     networks:
@@ -11,22 +11,21 @@ services:
       - redis-data:/data
     command: [ "redis-server", "--appendonly", "yes", "--requirepass", "password" ]
 
-  mysql:
-    image: mysql
-    container_name: onlineShopBackend-mysql
-    ports:
-      - "3308:3306"
+  db:
+    image: postgres:15.0
+    restart: always
     environment:
-      MYSQL_ROOT_PASSWORD: mysql
-    networks:
-      - app-network
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: ONS-postgres
     volumes:
-      - ./docker/mysql/init.sql:/docker-entrypoint-initdb.d/init.sql
-      - mysql-data:/var/lib/mysql
+      - ./volumes/postgres/data:/var/lib/postgresql
+      - ./volumes/postgres/logs:/logs
+    ports:
+      - 5433:5432
 
 volumes:
   redis-data:
-  mysql-data:
 
 networks:
   app-network:
