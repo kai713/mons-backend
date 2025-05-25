@@ -56,6 +56,7 @@ public class UserEntity implements UserDetails {
 //    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
 //    private CartEntity cart;
 
+    //TODO: вынести методы в какой то класс, UserEntity будет наследоваться от него и реализовать интерфейс UserDetails
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority(role.toString()));

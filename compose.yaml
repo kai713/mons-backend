@@ -1,7 +1,7 @@
 version: '4'
 services:
   redis:
-    image: redis
+    image: redis:7
     container_name: ONS-redis
     ports:
       - "6381:6379"
@@ -9,10 +9,16 @@ services:
       - app-network
     volumes:
       - redis-data:/data
-    command: [ "redis-server", "--appendonly", "yes", "--requirepass", "password" ]
+    command: >
+      redis-server
+      --appendonly yes
+      --requirepass password
+      --maxmemory 512mb
+      --maxmemory-policy allkeys-lru
 
   db:
     image: postgres:15.0
+    container_name: ONS-postgresz
     restart: always
     environment:
       POSTGRES_USER: postgres
@@ -23,6 +29,18 @@ services:
       - ./volumes/postgres/logs:/logs
     ports:
       - 5433:5432
+
+  redis-insight:
+    image: redis/redisinsight:2.68
+    container_name: ONS-redis-insight
+    ports:
+      - "8001:8001"
+    networks:
+      - app-network
+    depends_on:
+      - redis
+
+
 
 volumes:
   redis-data:

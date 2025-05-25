@@ -32,6 +32,7 @@ public class ProductService implements IProductService {
         Response response = new Response();
 
         try {
+            //TODO: Временно вынести в файловую систему, проще для деплоя на vps
             String imageUrl = awsS3Service.saveImageToS3(photo);
 
             ProductEntity newProduct = new ProductEntity();

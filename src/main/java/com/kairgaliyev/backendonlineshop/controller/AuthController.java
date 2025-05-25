@@ -59,6 +59,7 @@ public class AuthController {
         return ResponseEntity.ok(authResponse);
     }
 
+    //TODO: с new BadRequestException передавать, не обматывать таким образом ответ: "ResponseEntity<?>"
     @PostMapping("/refresh")
     public ResponseEntity<?> refreshToken(
             @CookieValue(name = "refreshToken") String refreshToken
@@ -67,11 +68,11 @@ public class AuthController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                     .body(Map.of("error", "Refresh token is missing"));
         }
-
+        //TODO: рефактор, вынести в service
         return refreshTokenService.findByToken(refreshToken)
                 .filter(refreshTokenService::validateRefreshToken)
                 .map(token -> {
-                    UserEntity user = token.getUser();
+//                    UserEntity user = token.getUser();
 //                    String newAccessToken = jwtUtils.generateToken(user);
 
                     return ResponseEntity.ok()
