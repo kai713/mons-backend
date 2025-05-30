@@ -49,12 +49,6 @@ public class UserEntity implements UserDetails {
 
     @Column(name = "deleted_at")
     private LocalDateTime deletedAt;
-//    @JsonIgnore
-//    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-//    private List<Order> orders = new ArrayList<>();
-//
-//    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-//    private CartEntity cart;
 
     //TODO: вынести методы в какой то класс, UserEntity будет наследоваться от него и реализовать интерфейс UserDetails
     @Override

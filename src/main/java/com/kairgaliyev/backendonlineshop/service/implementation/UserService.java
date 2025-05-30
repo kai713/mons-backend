@@ -2,229 +2,63 @@ package com.kairgaliyev.backendonlineshop.service.implementation;
 
 import com.kairgaliyev.backendonlineshop.dto.AuthResponse;
 import com.kairgaliyev.backendonlineshop.dto.LoginRequest;
-import com.kairgaliyev.backendonlineshop.dto.Response;
-import com.kairgaliyev.backendonlineshop.dto.UserDTO;
-import com.kairgaliyev.backendonlineshop.entity.CartEntity;
+import com.kairgaliyev.backendonlineshop.dto.UserDto;
+import com.kairgaliyev.backendonlineshop.dto.UserRequest;
 import com.kairgaliyev.backendonlineshop.entity.UserEntity;
-import com.kairgaliyev.backendonlineshop.enums.UserRole;
-import com.kairgaliyev.backendonlineshop.exception.MyException;
-import com.kairgaliyev.backendonlineshop.repository.CartRepository;
+import com.kairgaliyev.backendonlineshop.entity.mapper.UserMapper;
+import com.kairgaliyev.backendonlineshop.exception.BadRequestException;
 import com.kairgaliyev.backendonlineshop.repository.UserRepository;
 import com.kairgaliyev.backendonlineshop.service.intreface.IUserService;
-import com.kairgaliyev.backendonlineshop.utils.JWTUtils;
+import com.kairgaliyev.backendonlineshop.utils.JWTService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 @Slf4j
 public class UserService implements IUserService {
     private final UserRepository userRepository;
-    private final PasswordEncoder passwordEncoder;
-    private final JWTUtils jwtUtils;
-    private final AuthenticationManager authenticationManager;
-    private final CartRepository cartRepository;
     private final RefreshTokenService refreshTokenService;
+    private final JWTService jwtService;
+    private final UserMapper userMapper;
 
     @Override
-    public Response register(UserEntity user) {
-        Response response = new Response();
-        try {
-            //check if user already co not have role
-            if (user.getRole() == null || user.getRole().toString().isBlank()) {
-                user.setRole(UserRole.USER);
-            }
-            //check if user already have in db
-            if (userRepository.existsByEmail(user.getEmail())) {
-                throw new MyException(user.getEmail() + "Already Exists");
-            }
-            //build response and userDTO
-            user.setPassword(passwordEncoder.encode(user.getPassword()));
-            UserEntity savedUser = userRepository.save(user);
-//            UserDTO userDTO = Utils.mapUserEntityToUserDTO(savedUser);
-            response.setStatusCode(200);
-//            response.setUser(userDTO);
-
-            //Cart part
-            CartEntity cart = new CartEntity();
-            cart.setUser(user);
-
-//            cartRepository.save(cart);
-        } catch (MyException e) {
-            response.setStatusCode(400);
-            response.setMessage(e.getMessage());
-        } catch (Exception e) {
-            response.setStatusCode(500);
-            response.setMessage("Error Occurred During USer Registration " + e.getMessage());
+    public UserRequest register(UserRequest user) {
+        if (userRepository.findByEmail(user.email()).isPresent()) {
+            throw new BadRequestException("User already exists in system", "error.bad_request");
         }
-        return response;
+
+        UserEntity userEntity = userMapper.toNewUserEntity(user);
+        userEntity = userRepository.save(userEntity);
+        UserRequest userRequest = userMapper.toUserRequest(userEntity);
+        return userRequest;
     }
 
     @Override
     public AuthResponse login(LoginRequest request) {
         Authentication authentication = new UsernamePasswordAuthenticationToken(
-                request.getEmail(), request.getPassword());
+                request.email(), request.password());
         SecurityContextHolder.getContext().setAuthentication(authentication);
-        var user = userRepository.findByEmail(request.getEmail())
-                .orElseThrow(() -> new MyException("User not found"));
+        var user = userRepository.findByEmail(request.email())
+                .orElseThrow(() -> new RuntimeException("User not found"));
 
-//        String accessToken = jwtUtils.generateToken(user);
+        String accessToken = jwtService.generateToken(user);
         var refreshToken = refreshTokenService.createRefreshToken(user.getEmail());
 
-        return AuthResponse.builder()
-//                .accessToken(accessToken)
-                .refreshToken(refreshToken.getToken())
-                .build();
+        return new AuthResponse(accessToken, refreshToken.getToken());
     }
 
     @Override
-    public Response getAllUsers() {
+    public UserDto getCurrentUser(Long userId) {
+        UserEntity user = userRepository.findById(userId)
+                .orElseThrow(() -> new BadRequestException("not found", "error.not_found", "user"));
 
-        Response response = new Response();
-        try {
-            List<UserEntity> userList = userRepository.findAll();
-//            List<UserDTO> userDTOList = Utils.mapUserListEntityToUserListDTO(userList);
-            response.setStatusCode(200);
-            response.setMessage("successful");
-//            response.setUserList(userDTOList);
+        UserDto userDto = userMapper.toUserDto(user);
 
-        } catch (Exception e) {
-            response.setStatusCode(500);
-            response.setMessage("Error getting all users " + e.getMessage());
-        }
-        return response;
-    }
-
-    @Override
-    public Response updateUser(String userId, UserDTO userDTO) {
-        Response response = new Response();
-
-        try {
-            UserEntity existingUser = userRepository.findById(Long.valueOf(userId))
-                    .orElseThrow(() -> new MyException("user Not found"));
-
-            //TODO convert by mapstruct
-            if (userDTO.getEmail() != null) existingUser.setEmail(userDTO.getEmail());
-//            if (userDTO.getPhoneNumber() != null) existingUser.setPhoneNumber(userDTO.getPhoneNumber());
-            if (userDTO.getName() != null) existingUser.setName(userDTO.getName());
-            if (userDTO.getRole() != null) existingUser.setRole(userDTO.getRole());
-
-            if (userDTO.getPassword() != null && !userDTO.getPassword().isEmpty()) {
-                existingUser.setPassword(passwordEncoder.encode(userDTO.getPassword()));
-            }
-            userRepository.save(existingUser);
-
-        } catch (MyException e) {
-            response.setStatusCode(404);
-            response.setMessage(e.getMessage());
-
-        } catch (Exception e) {
-            response.setStatusCode(500);
-            response.setMessage("Error updating user" + e.getMessage());
-        }
-        return response;
-    }
-
-    @Override
-    public Response deleteUser(String userId) {
-
-        Response response = new Response();
-
-        try {
-            userRepository.findById(Long.valueOf(userId)).orElseThrow(() -> new MyException("User Not Found"));
-            userRepository.deleteById(Long.valueOf(userId));
-            response.setStatusCode(200);
-            response.setMessage("successful");
-
-        } catch (MyException e) {
-            response.setStatusCode(404);
-            response.setMessage(e.getMessage());
-
-        } catch (Exception e) {
-
-            response.setStatusCode(500);
-            response.setMessage("Error getting all users " + e.getMessage());
-        }
-        return response;
-    }
-
-    @Override
-    public Response getUserById(String userId) {
-
-        Response response = new Response();
-
-        try {
-            UserEntity user = userRepository.findById(Long.valueOf(userId)).orElseThrow(() -> new MyException("User Not Found"));
-//            UserDTO userDTO = Utils.mapUserEntityToUserDTO(user);
-            response.setStatusCode(200);
-            response.setMessage("successful");
-//            response.setUser(userDTO);
-
-        } catch (MyException e) {
-            response.setStatusCode(404);
-            response.setMessage(e.getMessage());
-
-        } catch (Exception e) {
-
-            response.setStatusCode(500);
-            response.setMessage("Error getting all users " + e.getMessage());
-        }
-        return response;
-    }
-
-    @Override
-    public Response getMyInfo(Long userId) {
-        Response response = new Response();
-
-        try {
-            UserEntity user = userRepository.findById(userId).orElseThrow(() -> new MyException("User Not Found"));
-//            UserDTO userDTO = Utils.mapUserEntityToUserDTO(user);
-            response.setStatusCode(200);
-            response.setMessage("successful");
-//            response.setUser(userDTO);
-
-        } catch (MyException e) {
-            response.setStatusCode(404);
-            response.setMessage(e.getMessage());
-
-        } catch (Exception e) {
-
-            response.setStatusCode(500);
-            response.setMessage("Error getting all users " + e.getMessage());
-        }
-        log.info("getMyInfo service user: {}", response);
-        return response;
-    }
-
-    @Override
-    public Response changeRoleById(String userId, UserRole role) {
-        Response response = new Response();
-
-        try {
-            UserEntity user = userRepository.findById(Long.valueOf(userId)).orElseThrow(() -> new MyException("User Not Found"));
-//            UserDTO userDTO = Utils.mapUserEntityToUserDTO(user);
-            user.setRole(role);
-            userRepository.save(user);
-            response.setStatusCode(200);
-            response.setMessage("successful");
-//            response.setUser(userDTO);
-
-        } catch (MyException e) {
-            response.setStatusCode(404);
-            response.setMessage(e.getMessage());
-
-        } catch (Exception e) {
-            response.setStatusCode(500);
-            response.setMessage("Error change role user " + e.getMessage());
-        }
-        return response;
+        return userDto;
     }
 }

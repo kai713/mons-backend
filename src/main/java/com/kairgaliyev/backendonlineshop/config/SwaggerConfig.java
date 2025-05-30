@@ -13,8 +13,7 @@ public class SwaggerConfig {
         return new OpenAPI()
                 .info(new Info()
                         .title("API")
-                        .version("1.0")
-                        .description("API for manage and check"));
+                        .version("1.0"));
     }
 
     @Bean
@@ -24,20 +23,4 @@ public class SwaggerConfig {
                 .pathsToMatch("/v1/auth/**")
                 .build();
     }
-
-//    @Bean
-//    public GroupedOpenApi sensorsApi() {
-//        return GroupedOpenApi.builder()
-//                .group("sensors")
-//                .pathsToMatch("/sensors/**")
-//                .build();
-//    }
-//
-//    @Bean
-//    public GroupedOpenApi authenticationApi() {
-//        return GroupedOpenApi.builder()
-//                .group("authentication")
-//                .pathsToMatch("/auth/**")
-//                .build();
-//    }
 }

@@ -1,13 +1,12 @@
 package com.kairgaliyev.backendonlineshop.security;
 
 import com.kairgaliyev.backendonlineshop.service.CustomUserDetailsService;
-import com.kairgaliyev.backendonlineshop.utils.JWTUtils;
+import com.kairgaliyev.backendonlineshop.utils.JWTService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -19,9 +18,9 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import java.io.IOException;
 
 @Component
-@RequiredArgsConstructor(onConstructor = @__(@Autowired))
+@RequiredArgsConstructor
 public class JWTAuthFilter extends OncePerRequestFilter {
-    private final JWTUtils jwtUtils;
+    private final JWTService jwtService;
     private final CustomUserDetailsService customUserDetailsService;
 
     @Override
@@ -37,12 +36,12 @@ public class JWTAuthFilter extends OncePerRequestFilter {
         }
 
         jwtToken = authHeader.substring(7);
-        userEmail = jwtUtils.extractUsername(jwtToken);
-        userId = jwtUtils.extractUserId(jwtToken);
+        userEmail = jwtService.extractUsername(jwtToken);
+        userId = jwtService.extractUserId(jwtToken);
 
         if (userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             UserDetails userDetails = customUserDetailsService.loadUserByUsername(userEmail);
-            if (jwtUtils.isValidToken(jwtToken, userDetails)) {
+            if (jwtService.isValidToken(jwtToken, userDetails)) {
                 UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
                 token.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 

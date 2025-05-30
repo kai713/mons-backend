@@ -18,6 +18,9 @@ public class OrderEntity {
     @Column(name = "id", nullable = false)
     private Long id;
 
+    @Column(name = "quantity")
+    private Integer quantity;
+
     @Enumerated(EnumType.STRING)
     private OrderStatus orderStatus;
 
@@ -28,14 +31,10 @@ public class OrderEntity {
     private LocalDateTime updatedAt;
 
     @ManyToOne
+    @JoinColumn(name = "product_id")
+    private ProductEntity productEntity;
+
+    @ManyToOne
     @JoinColumn(name = "user_id")
     private UserEntity user;
-
-//    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-//    private List<OrderItem> orderItems = new ArrayList<>();
-
-//    @PreUpdate
-//    protected void onUpdate() {
-//        this.updatedAt = LocalDateTime.now();
-//    }
 }

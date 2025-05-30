@@ -1,15 +1,13 @@
 package com.kairgaliyev.backendonlineshop.service.intreface;
 
+import com.kairgaliyev.backendonlineshop.dto.AuthResponse;
 import com.kairgaliyev.backendonlineshop.entity.RefreshTokenEntity;
-
-import java.util.Optional;
+import jakarta.servlet.http.HttpServletRequest;
 
 public interface IRefreshTokenService {
     RefreshTokenEntity createRefreshToken(String email);
 
-    Optional<RefreshTokenEntity> findByToken(String token);
+    void invalidateRefreshToken(HttpServletRequest request);
 
-    boolean validateRefreshToken(RefreshTokenEntity token);
-
-    void invalidateRefreshToken(String tokenValue);
+    AuthResponse refreshAccessToken(String refreshToken);
 }

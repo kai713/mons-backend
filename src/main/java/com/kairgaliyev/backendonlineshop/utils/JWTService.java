@@ -16,7 +16,7 @@ import java.util.Date;
 import java.util.function.Function;
 
 @Service
-public class JWTUtils {
+public class JWTService {
     private static final long EXPIRATION_TIME = 1000 * 30;
     private SecretKey key;
     @Value("${spring.secret.string}")
@@ -30,8 +30,8 @@ public class JWTUtils {
 
     public String generateToken(UserEntity user) {
         return Jwts.builder()
-                .subject(user.getEmail()) //adding email in subject
-                .claim("userId", user.getId()) //adding userId in claims
+                .subject(user.getEmail())
+                .claim("userId", user.getId())
                 .issuedAt(new Date(System.currentTimeMillis()))
                 .expiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
                 .signWith(key)

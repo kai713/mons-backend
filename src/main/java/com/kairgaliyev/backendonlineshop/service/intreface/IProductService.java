@@ -1,19 +1,20 @@
 package com.kairgaliyev.backendonlineshop.service.intreface;
 
-import com.kairgaliyev.backendonlineshop.dto.ProductDTO;
-import com.kairgaliyev.backendonlineshop.dto.Response;
+import com.kairgaliyev.backendonlineshop.dto.ProductDto;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
+
 public interface IProductService {
-    Response addProduct(ProductDTO productDTO, MultipartFile file);
+    ProductDto addProduct(ProductDto productDTO, MultipartFile file);
 
-    Response updateProduct(ProductDTO productDTO, MultipartFile file);
+    ProductDto updateProduct(ProductDto productDTO, MultipartFile file);
 
-    Response deleteProduct(String productId);
+    void deleteProduct(String productId);
 
-    Response getAllProducts();
+    List<ProductDto> getAllProducts();
 
-    Response getProductById(String productId);
+    ProductDto getProductById(String productId);
 
-    Response searchProduct(String input);
+    ProductDto searchProduct(String input);
 }
