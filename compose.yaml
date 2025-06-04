@@ -18,7 +18,7 @@ services:
 
   db:
     image: postgres:15.0
-    container_name: ONS-postgresz
+    container_name: ONS-postgres
     restart: always
     environment:
       POSTGRES_USER: postgres

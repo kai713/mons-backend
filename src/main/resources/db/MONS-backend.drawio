@@ -1,0 +1,273 @@
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36 Edg/137.0.0.0" version="27.1.1">
+  <diagram name="Страница — 1" id="8MGVT2S6RMyuHNywXTan">
+    <mxGraphModel dx="2333" dy="3056" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="n48tOo-S1rUGBAmjSHUs-1" value="users" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=26;fillColor=none;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="730" y="580" width="240" height="200" as="geometry" />
+        </mxCell>
+        <mxCell id="n48tOo-S1rUGBAmjSHUs-2" value="&lt;div style=&quot;background-color:#1e1f22;color:#bcbec4&quot;&gt;&lt;pre style=&quot;font-family:&#39;JetBrains Mono&#39;,monospace;font-size:9,0pt;&quot;&gt;&lt;span style=&quot;color:#c77dbb;&quot;&gt;id         &lt;/span&gt;&lt;span style=&quot;color:#cf8e6d;&quot;&gt;bigserial primary key&lt;/span&gt;,&lt;br&gt;&lt;span style=&quot;color:#c77dbb;&quot;&gt;name       &lt;/span&gt;&lt;span style=&quot;color:#cf8e6d;&quot;&gt;varchar&lt;/span&gt;(&lt;span style=&quot;color:#2aacb8;&quot;&gt;255&lt;/span&gt;) &lt;span style=&quot;color:#cf8e6d;&quot;&gt;not null&lt;/span&gt;,&lt;br&gt;&lt;span style=&quot;color:#c77dbb;&quot;&gt;email      &lt;/span&gt;&lt;span style=&quot;color:#cf8e6d;&quot;&gt;varchar&lt;/span&gt;(&lt;span style=&quot;color:#2aacb8;&quot;&gt;255&lt;/span&gt;) &lt;span style=&quot;color:#cf8e6d;&quot;&gt;unique&lt;/span&gt;,&lt;br&gt;&lt;span style=&quot;color:#c77dbb;&quot;&gt;phone      &lt;/span&gt;&lt;span style=&quot;color:#cf8e6d;&quot;&gt;varchar&lt;/span&gt;(&lt;span style=&quot;color:#2aacb8;&quot;&gt;255&lt;/span&gt;),&lt;br&gt;&lt;span style=&quot;color:#c77dbb;&quot;&gt;password   &lt;/span&gt;&lt;span style=&quot;color:#cf8e6d;&quot;&gt;varchar&lt;/span&gt;(&lt;span style=&quot;color:#2aacb8;&quot;&gt;255&lt;/span&gt;),&lt;br&gt;&lt;span style=&quot;color:#c77dbb;&quot;&gt;role       &lt;/span&gt;&lt;span style=&quot;color:#cf8e6d;&quot;&gt;varchar&lt;/span&gt;(&lt;span style=&quot;color:#2aacb8;&quot;&gt;100&lt;/span&gt;),&lt;br&gt;&lt;span style=&quot;color:#c77dbb;&quot;&gt;created_at &lt;/span&gt;&lt;span style=&quot;color:#cf8e6d;&quot;&gt;timestamp default &lt;/span&gt;&lt;span style=&quot;color:#57aaf7;font-style:italic;&quot;&gt;now&lt;/span&gt;(),&lt;br&gt;&lt;span style=&quot;color:#c77dbb;&quot;&gt;blocked_at &lt;/span&gt;&lt;span style=&quot;color:#cf8e6d;&quot;&gt;timestamp    null&lt;/span&gt;,&lt;br&gt;&lt;span style=&quot;color:#c77dbb;&quot;&gt;updated_at &lt;/span&gt;&lt;span style=&quot;color:#cf8e6d;&quot;&gt;timestamp    null&lt;/span&gt;,&lt;br&gt;&lt;span style=&quot;color:#c77dbb;&quot;&gt;deleted_at &lt;/span&gt;&lt;span style=&quot;color:#cf8e6d;&quot;&gt;timestamp    null&lt;/span&gt;&lt;/pre&gt;&lt;/div&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" parent="n48tOo-S1rUGBAmjSHUs-1" vertex="1">
+          <mxGeometry y="26" width="240" height="174" as="geometry" />
+        </mxCell>
+        <mxCell id="n48tOo-S1rUGBAmjSHUs-5" value="inventory" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=26;fillColor=none;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="1160" y="570" width="570" height="220" as="geometry" />
+        </mxCell>
+        <mxCell id="n48tOo-S1rUGBAmjSHUs-6" value="&lt;div style=&quot;background-color: rgb(30, 31, 34); color: rgb(188, 190, 196);&quot;&gt;&lt;pre style=&quot;font-family:&#39;JetBrains Mono&#39;,monospace;font-size:9,0pt;&quot;&gt;&lt;div style=&quot;background-color: rgb(30, 31, 34); color: rgb(188, 190, 196);&quot;&gt;&lt;pre style=&quot;font-family:&#39;JetBrains Mono&#39;,monospace;font-size:9,0pt;&quot;&gt;&lt;span style=&quot;color: rgb(199, 125, 187);&quot;&gt;id         &lt;/span&gt;&lt;span style=&quot;color: rgb(207, 142, 109);&quot;&gt;bigserial primary key&lt;/span&gt;,&lt;br&gt;&lt;span style=&quot;color: rgb(199, 125, 187);&quot;&gt;product_id &lt;/span&gt;&lt;span style=&quot;color: rgb(207, 142, 109);&quot;&gt;bigint       not null&lt;/span&gt;,&lt;br&gt;&lt;span style=&quot;color: rgb(199, 125, 187);&quot;&gt;broker     &lt;/span&gt;&lt;span style=&quot;color: rgb(207, 142, 109);&quot;&gt;varchar&lt;/span&gt;(&lt;span style=&quot;color: rgb(42, 172, 184);&quot;&gt;255&lt;/span&gt;) &lt;span style=&quot;color: rgb(207, 142, 109);&quot;&gt;not null&lt;/span&gt;,        &lt;span style=&quot;color: rgb(122, 126, 133);&quot;&gt;--названия брокер/поставщик товара/компания&lt;br&gt;&lt;/span&gt;&lt;span style=&quot;color: rgb(199, 125, 187);&quot;&gt;author_id  &lt;/span&gt;&lt;span style=&quot;color: rgb(207, 142, 109);&quot;&gt;bigint       not null&lt;/span&gt;, &lt;span style=&quot;color: rgb(122, 126, 133);&quot;&gt;--deliver id, unique для того чтобы&lt;br&gt;&lt;/span&gt;&lt;span style=&quot;color: rgb(199, 125, 187);&quot;&gt;quantity   &lt;/span&gt;&lt;span style=&quot;color: rgb(207, 142, 109);&quot;&gt;int          not null&lt;/span&gt;,&lt;br&gt;&lt;span style=&quot;color: rgb(199, 125, 187);&quot;&gt;price      &lt;/span&gt;&lt;span style=&quot;color: rgb(207, 142, 109);&quot;&gt;double precision default &lt;/span&gt;&lt;span style=&quot;color: rgb(42, 172, 184);&quot;&gt;0&lt;/span&gt;,&lt;br&gt;&lt;span style=&quot;color: rgb(199, 125, 187);&quot;&gt;created_at &lt;/span&gt;&lt;span style=&quot;color: rgb(207, 142, 109);&quot;&gt;timestamp        default &lt;/span&gt;&lt;span style=&quot;color: rgb(87, 170, 247); font-style: italic;&quot;&gt;now&lt;/span&gt;(),&lt;br&gt;&lt;span style=&quot;color: rgb(199, 125, 187);&quot;&gt;updated_at &lt;/span&gt;&lt;span style=&quot;color: rgb(207, 142, 109);&quot;&gt;timestamp&lt;/span&gt;,&lt;br&gt;&lt;span style=&quot;color: rgb(199, 125, 187);&quot;&gt;deleted_at &lt;/span&gt;&lt;span style=&quot;color: rgb(207, 142, 109);&quot;&gt;timestamp&lt;/span&gt;,&lt;br&gt;&lt;span style=&quot;color: rgb(207, 142, 109);&quot;&gt;foreign key &lt;/span&gt;(&lt;span style=&quot;color: rgb(199, 125, 187);&quot;&gt;product_id&lt;/span&gt;) &lt;span style=&quot;color: rgb(207, 142, 109);&quot;&gt;references &lt;/span&gt;products (&lt;span style=&quot;color: rgb(199, 125, 187);&quot;&gt;id&lt;/span&gt;),&lt;br&gt;&lt;span style=&quot;color: rgb(207, 142, 109);&quot;&gt;foreign key &lt;/span&gt;(&lt;span style=&quot;color: rgb(199, 125, 187);&quot;&gt;author_id&lt;/span&gt;) &lt;span style=&quot;color: rgb(207, 142, 109);&quot;&gt;references &lt;/span&gt;users (&lt;span style=&quot;color: rgb(199, 125, 187);&quot;&gt;id&lt;/span&gt;)&lt;br&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/pre&gt;&lt;/div&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" parent="n48tOo-S1rUGBAmjSHUs-5" vertex="1">
+          <mxGeometry y="26" width="570" height="194" as="geometry" />
+        </mxCell>
+        <mxCell id="n48tOo-S1rUGBAmjSHUs-9" value="" style="endArrow=none;html=1;rounded=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;" parent="1" target="n48tOo-S1rUGBAmjSHUs-6" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="971" y="693" as="sourcePoint" />
+            <mxPoint x="1161" y="703" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="n48tOo-S1rUGBAmjSHUs-11" value="0...*" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" parent="n48tOo-S1rUGBAmjSHUs-9" vertex="1" connectable="0">
+          <mxGeometry x="0.5028" y="-1" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="CAyCC45538xayjlcrZlc-17" value="1" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" parent="n48tOo-S1rUGBAmjSHUs-9" vertex="1" connectable="0">
+          <mxGeometry x="-0.5516" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="n48tOo-S1rUGBAmjSHUs-12" value="category" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=26;fillColor=none;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="730" y="1050" width="390" height="130" as="geometry" />
+        </mxCell>
+        <mxCell id="n48tOo-S1rUGBAmjSHUs-13" value="&lt;div style=&quot;background-color:#1e1f22;color:#bcbec4&quot;&gt;&lt;pre style=&quot;font-family:&#39;JetBrains Mono&#39;,monospace;font-size:9,0pt;&quot;&gt;&lt;span style=&quot;color:#c77dbb;&quot;&gt;id                 &lt;/span&gt;&lt;span style=&quot;color:#cf8e6d;&quot;&gt;bigserial primary key&lt;/span&gt;,&lt;br&gt;&lt;span style=&quot;color:#c77dbb;&quot;&gt;name               &lt;/span&gt;&lt;span style=&quot;color:#cf8e6d;&quot;&gt;varchar&lt;/span&gt;(&lt;span style=&quot;color:#2aacb8;&quot;&gt;255&lt;/span&gt;)                &lt;span style=&quot;color:#cf8e6d;&quot;&gt;null&lt;/span&gt;,&lt;br&gt;&lt;span style=&quot;color:#c77dbb;&quot;&gt;deleted_at         &lt;/span&gt;&lt;span style=&quot;color:#cf8e6d;&quot;&gt;timestamp without time zone null&lt;/span&gt;,&lt;br&gt;&lt;span style=&quot;color:#c77dbb;&quot;&gt;parent_category_id &lt;/span&gt;&lt;span style=&quot;color:#cf8e6d;&quot;&gt;bigint                      null&lt;/span&gt;,&lt;br&gt;&lt;span style=&quot;color:#cf8e6d;&quot;&gt;foreign key &lt;/span&gt;(&lt;span style=&quot;color:#c77dbb;&quot;&gt;parent_category_id&lt;/span&gt;) &lt;span style=&quot;color:#cf8e6d;&quot;&gt;references category &lt;/span&gt;(&lt;span style=&quot;color:#c77dbb;&quot;&gt;id&lt;/span&gt;)&lt;br&gt;&lt;/pre&gt;&lt;/div&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" parent="n48tOo-S1rUGBAmjSHUs-12" vertex="1">
+          <mxGeometry y="26" width="390" height="104" as="geometry" />
+        </mxCell>
+        <mxCell id="CAyCC45538xayjlcrZlc-1" value="products" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=26;fillColor=none;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="1280" y="900" width="350" height="200" as="geometry" />
+        </mxCell>
+        <mxCell id="CAyCC45538xayjlcrZlc-2" value="&lt;div style=&quot;background-color:#1e1f22;color:#bcbec4&quot;&gt;&lt;pre style=&quot;font-family:&#39;JetBrains Mono&#39;,monospace;font-size:9,0pt;&quot;&gt;&lt;span style=&quot;color:#c77dbb;&quot;&gt;id          &lt;/span&gt;&lt;span style=&quot;color:#cf8e6d;&quot;&gt;bigserial primary key&lt;/span&gt;,&lt;br&gt;&lt;span style=&quot;color:#c77dbb;&quot;&gt;name        &lt;/span&gt;&lt;span style=&quot;color:#cf8e6d;&quot;&gt;varchar&lt;/span&gt;(&lt;span style=&quot;color:#2aacb8;&quot;&gt;255&lt;/span&gt;) &lt;span style=&quot;color:#cf8e6d;&quot;&gt;not null&lt;/span&gt;,&lt;br&gt;&lt;span style=&quot;color:#c77dbb;&quot;&gt;description &lt;/span&gt;&lt;span style=&quot;color:#cf8e6d;&quot;&gt;text         null default &lt;/span&gt;&lt;span style=&quot;color:#6aab73;&quot;&gt;&#39;&#39;&lt;/span&gt;,&lt;br&gt;&lt;span style=&quot;color:#c77dbb;&quot;&gt;image_url   &lt;/span&gt;&lt;span style=&quot;color:#cf8e6d;&quot;&gt;varchar&lt;/span&gt;(&lt;span style=&quot;color:#2aacb8;&quot;&gt;255&lt;/span&gt;) &lt;span style=&quot;color:#cf8e6d;&quot;&gt;null&lt;/span&gt;,&lt;br&gt;&lt;span style=&quot;color:#c77dbb;&quot;&gt;created_at  &lt;/span&gt;&lt;span style=&quot;color:#cf8e6d;&quot;&gt;timestamp         default &lt;/span&gt;&lt;span style=&quot;color:#57aaf7;font-style:italic;&quot;&gt;now&lt;/span&gt;(),&lt;br&gt;&lt;span style=&quot;color:#c77dbb;&quot;&gt;deleted_at  &lt;/span&gt;&lt;span style=&quot;color:#cf8e6d;&quot;&gt;timestamp    null&lt;/span&gt;,&lt;br&gt;&lt;span style=&quot;color:#c77dbb;&quot;&gt;category_id &lt;/span&gt;&lt;span style=&quot;color:#cf8e6d;&quot;&gt;bigint       null&lt;/span&gt;,&lt;br&gt;&lt;span style=&quot;color:#c77dbb;&quot;&gt;author_id   &lt;/span&gt;&lt;span style=&quot;color:#cf8e6d;&quot;&gt;bigint       not null&lt;/span&gt;,&lt;br&gt;&lt;span style=&quot;color:#cf8e6d;&quot;&gt;foreign key &lt;/span&gt;(&lt;span style=&quot;color:#c77dbb;&quot;&gt;category_id&lt;/span&gt;) &lt;span style=&quot;color:#cf8e6d;&quot;&gt;references category &lt;/span&gt;(&lt;span style=&quot;color:#c77dbb;&quot;&gt;id&lt;/span&gt;),&lt;br&gt;&lt;span style=&quot;color:#cf8e6d;&quot;&gt;foreign key &lt;/span&gt;(&lt;span style=&quot;color:#c77dbb;&quot;&gt;author_id&lt;/span&gt;) &lt;span style=&quot;color:#cf8e6d;&quot;&gt;references &lt;/span&gt;users (&lt;span style=&quot;color:#c77dbb;&quot;&gt;id&lt;/span&gt;)&lt;br&gt;&lt;/pre&gt;&lt;/div&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" parent="CAyCC45538xayjlcrZlc-1" vertex="1">
+          <mxGeometry y="26" width="350" height="174" as="geometry" />
+        </mxCell>
+        <mxCell id="CAyCC45538xayjlcrZlc-5" value="" style="endArrow=none;html=1;rounded=0;entryX=0.501;entryY=1.013;entryDx=0;entryDy=0;entryPerimeter=0;exitX=0.5;exitY=0;exitDx=0;exitDy=0;" parent="1" source="CAyCC45538xayjlcrZlc-1" target="n48tOo-S1rUGBAmjSHUs-6" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="1390" y="870" as="sourcePoint" />
+            <mxPoint x="1440" y="820" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="CAyCC45538xayjlcrZlc-6" value="0...*" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" parent="CAyCC45538xayjlcrZlc-5" vertex="1" connectable="0">
+          <mxGeometry x="0.4887" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="CAyCC45538xayjlcrZlc-10" value="1" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" parent="CAyCC45538xayjlcrZlc-5" vertex="1" connectable="0">
+          <mxGeometry x="-0.3813" y="2" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="CAyCC45538xayjlcrZlc-11" value="" style="endArrow=none;html=1;rounded=0;exitX=1.001;exitY=0.445;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" parent="1" source="n48tOo-S1rUGBAmjSHUs-13" target="CAyCC45538xayjlcrZlc-2" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="1180" y="1020" as="sourcePoint" />
+            <mxPoint x="1230" y="970" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="CAyCC45538xayjlcrZlc-12" value="0...1" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" parent="CAyCC45538xayjlcrZlc-11" vertex="1" connectable="0">
+          <mxGeometry x="-0.6198" y="-1" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="CAyCC45538xayjlcrZlc-13" value="0...*" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" parent="CAyCC45538xayjlcrZlc-11" vertex="1" connectable="0">
+          <mxGeometry x="0.4773" y="-1" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="CAyCC45538xayjlcrZlc-14" value="" style="endArrow=none;html=1;rounded=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;exitX=0.502;exitY=0.995;exitDx=0;exitDy=0;exitPerimeter=0;" parent="1" source="n48tOo-S1rUGBAmjSHUs-2" target="CAyCC45538xayjlcrZlc-2" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="960" y="940" as="sourcePoint" />
+            <mxPoint x="1010" y="890" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="850" y="1010" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="CAyCC45538xayjlcrZlc-15" value="1" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" parent="CAyCC45538xayjlcrZlc-14" vertex="1" connectable="0">
+          <mxGeometry x="-0.763" y="-3" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="CAyCC45538xayjlcrZlc-27" value="0...*" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" parent="CAyCC45538xayjlcrZlc-14" vertex="1" connectable="0">
+          <mxGeometry x="0.363" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="CAyCC45538xayjlcrZlc-18" value="orders" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=26;fillColor=none;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="50" y="585" width="490" height="190" as="geometry" />
+        </mxCell>
+        <mxCell id="CAyCC45538xayjlcrZlc-19" value="&lt;div style=&quot;background-color: rgb(30, 31, 34); color: rgb(188, 190, 196);&quot;&gt;&lt;pre style=&quot;font-family:&#39;JetBrains Mono&#39;,monospace;font-size:9,0pt;&quot;&gt;&lt;div style=&quot;background-color:#1e1f22;color:#bcbec4&quot;&gt;&lt;pre style=&quot;font-family:&#39;JetBrains Mono&#39;,monospace;font-size:9,0pt;&quot;&gt;&lt;span style=&quot;color:#c77dbb;&quot;&gt;id           &lt;/span&gt;&lt;span style=&quot;color:#cf8e6d;&quot;&gt;bigint       not null unique default &lt;/span&gt;&lt;span style=&quot;color:#57aaf7;font-style:italic;&quot;&gt;nextval&lt;/span&gt;(&lt;span style=&quot;color:#6aab73;&quot;&gt;&#39;&lt;/span&gt;&lt;span style=&quot;color:#6aab73;background-color:#293c40;&quot;&gt;orders_seq&lt;/span&gt;&lt;span style=&quot;color:#6aab73;&quot;&gt;&#39;&lt;/span&gt;),&lt;br&gt;&lt;span style=&quot;color:#c77dbb;&quot;&gt;product_id   &lt;/span&gt;&lt;span style=&quot;color:#cf8e6d;&quot;&gt;bigint       not null&lt;/span&gt;,&lt;br&gt;&lt;span style=&quot;color:#c77dbb;&quot;&gt;user_id      &lt;/span&gt;&lt;span style=&quot;color:#cf8e6d;&quot;&gt;bigint       not null&lt;/span&gt;,&lt;br&gt;&lt;span style=&quot;color:#c77dbb;&quot;&gt;quantity     &lt;/span&gt;&lt;span style=&quot;color:#cf8e6d;&quot;&gt;int                          default &lt;/span&gt;&lt;span style=&quot;color:#2aacb8;&quot;&gt;0&lt;/span&gt;,&lt;br&gt;&lt;span style=&quot;color:#c77dbb;&quot;&gt;order_status &lt;/span&gt;&lt;span style=&quot;color:#cf8e6d;&quot;&gt;varchar&lt;/span&gt;(&lt;span style=&quot;color:#2aacb8;&quot;&gt;200&lt;/span&gt;) &lt;span style=&quot;color:#cf8e6d;&quot;&gt;null&lt;/span&gt;,&lt;br&gt;&lt;span style=&quot;color:#c77dbb;&quot;&gt;created_at   &lt;/span&gt;&lt;span style=&quot;color:#cf8e6d;&quot;&gt;timestamp                    default &lt;/span&gt;&lt;span style=&quot;color:#57aaf7;font-style:italic;&quot;&gt;now&lt;/span&gt;(),&lt;br&gt;&lt;span style=&quot;color:#c77dbb;&quot;&gt;updated_at   &lt;/span&gt;&lt;span style=&quot;color:#cf8e6d;&quot;&gt;timestamp    null&lt;/span&gt;,&lt;br&gt;&lt;span style=&quot;color:#cf8e6d;&quot;&gt;foreign key &lt;/span&gt;(&lt;span style=&quot;color:#c77dbb;&quot;&gt;product_id&lt;/span&gt;) &lt;span style=&quot;color:#cf8e6d;&quot;&gt;references &lt;/span&gt;products (&lt;span style=&quot;color:#c77dbb;&quot;&gt;id&lt;/span&gt;),&lt;br&gt;&lt;span style=&quot;color:#cf8e6d;&quot;&gt;foreign key &lt;/span&gt;(&lt;span style=&quot;color:#c77dbb;&quot;&gt;user_id&lt;/span&gt;) &lt;span style=&quot;color:#cf8e6d;&quot;&gt;references &lt;/span&gt;users (&lt;span style=&quot;color:#c77dbb;&quot;&gt;id&lt;/span&gt;)&lt;br&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/pre&gt;&lt;/div&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" parent="CAyCC45538xayjlcrZlc-18" vertex="1">
+          <mxGeometry y="26" width="490" height="164" as="geometry" />
+        </mxCell>
+        <mxCell id="CAyCC45538xayjlcrZlc-23" value="создавать inventory к products доступен для users с ролью &quot;SELLER&quot;" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="1010" y="580" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="CAyCC45538xayjlcrZlc-24" value="" style="endArrow=none;html=1;rounded=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;" parent="1" source="CAyCC45538xayjlcrZlc-19" target="n48tOo-S1rUGBAmjSHUs-2" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="630" y="710" as="sourcePoint" />
+            <mxPoint x="680" y="660" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="CAyCC45538xayjlcrZlc-25" value="1" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" parent="CAyCC45538xayjlcrZlc-24" vertex="1" connectable="0">
+          <mxGeometry x="0.4953" y="-3" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="CAyCC45538xayjlcrZlc-26" value="0...*" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" parent="CAyCC45538xayjlcrZlc-24" vertex="1" connectable="0">
+          <mxGeometry x="-0.5075" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="CAyCC45538xayjlcrZlc-28" value="создавать inventory к products доступен для users с ролью &quot;ADMIN&quot; или &quot;MANAGER&quot;" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="880" y="930" width="140" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="CAyCC45538xayjlcrZlc-33" value="refresh_token" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=26;fillColor=none;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="220" y="950" width="300" height="130" as="geometry" />
+        </mxCell>
+        <mxCell id="CAyCC45538xayjlcrZlc-34" value="&lt;div style=&quot;background-color:#1e1f22;color:#bcbec4&quot;&gt;&lt;pre style=&quot;font-family:&#39;JetBrains Mono&#39;,monospace;font-size:9,0pt;&quot;&gt;&lt;span style=&quot;color:#c77dbb;&quot;&gt;id          &lt;/span&gt;&lt;span style=&quot;color:#cf8e6d;&quot;&gt;bigserial primary key&lt;/span&gt;,&lt;br&gt;&lt;span style=&quot;color:#c77dbb;&quot;&gt;token       &lt;/span&gt;&lt;span style=&quot;color:#cf8e6d;&quot;&gt;varchar&lt;/span&gt;(&lt;span style=&quot;color:#2aacb8;&quot;&gt;255&lt;/span&gt;) &lt;span style=&quot;color:#cf8e6d;&quot;&gt;not null&lt;/span&gt;,&lt;br&gt;&lt;span style=&quot;color:#c77dbb;&quot;&gt;user_id     &lt;/span&gt;&lt;span style=&quot;color:#cf8e6d;&quot;&gt;bigint       not null&lt;/span&gt;,&lt;br&gt;&lt;span style=&quot;color:#c77dbb;&quot;&gt;expiry_date &lt;/span&gt;&lt;span style=&quot;color:#cf8e6d;&quot;&gt;timestamp with time zone&lt;/span&gt;,&lt;br&gt;&lt;span style=&quot;color:#cf8e6d;&quot;&gt;foreign key &lt;/span&gt;(&lt;span style=&quot;color:#c77dbb;&quot;&gt;user_id&lt;/span&gt;) &lt;span style=&quot;color:#cf8e6d;&quot;&gt;references &lt;/span&gt;users (&lt;span style=&quot;color:#c77dbb;&quot;&gt;id&lt;/span&gt;)&lt;br&gt;&lt;/pre&gt;&lt;/div&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" parent="CAyCC45538xayjlcrZlc-33" vertex="1">
+          <mxGeometry y="26" width="300" height="104" as="geometry" />
+        </mxCell>
+        <mxCell id="CAyCC45538xayjlcrZlc-37" value="" style="endArrow=none;html=1;rounded=0;entryX=0;entryY=1;entryDx=0;entryDy=0;entryPerimeter=0;exitX=1;exitY=0;exitDx=0;exitDy=0;" parent="1" source="CAyCC45538xayjlcrZlc-33" target="n48tOo-S1rUGBAmjSHUs-2" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="590" y="910" as="sourcePoint" />
+            <mxPoint x="640" y="860" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="CAyCC45538xayjlcrZlc-38" value="1" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" parent="CAyCC45538xayjlcrZlc-37" vertex="1" connectable="0">
+          <mxGeometry x="0.4894" y="2" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="CAyCC45538xayjlcrZlc-39" value="1...*" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" parent="CAyCC45538xayjlcrZlc-37" vertex="1" connectable="0">
+          <mxGeometry x="-0.3856" y="2" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="CAyCC45538xayjlcrZlc-41" value="На уровне кода проверяется и валидируется refresh_token, у одного юзера может быть только один refresh_token&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;&amp;nbsp;&lt;/span&gt;" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="370" y="850" width="150" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="CAyCC45538xayjlcrZlc-42" value="Что может делать user если он не зарегистрирован:&lt;br&gt;1)Видеть все товары, категории и коллекции товаров&lt;br&gt;2)Добавлять товары в избранное и корзину&lt;br&gt;3)Покупать товары после добавления в корзину&lt;div&gt;&lt;br/&gt;&lt;/div&gt;" style="whiteSpace=wrap;html=1;aspect=fixed;" parent="1" vertex="1">
+          <mxGeometry x="-560" y="50" width="210" height="210" as="geometry" />
+        </mxCell>
+        <mxCell id="CAyCC45538xayjlcrZlc-43" value="user заходить на страницу" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="-410" y="-935" width="150" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="CN-ITaqG8iRPNj5y_a_c-2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="CAyCC45538xayjlcrZlc-45" target="CAyCC45538xayjlcrZlc-47" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="CN-ITaqG8iRPNj5y_a_c-4" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" parent="1" source="CAyCC45538xayjlcrZlc-45" target="CN-ITaqG8iRPNj5y_a_c-3" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="CAyCC45538xayjlcrZlc-45" value="делает регистрацию/ сделана регистрация ?&amp;nbsp;" style="rhombus;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="697.5" y="-959.99" width="95" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="CAyCC45538xayjlcrZlc-47" value="При попытке входа на профиль, перенаправление на страницу регистрации" style="rounded=0;whiteSpace=wrap;html=1;align=left;" parent="1" vertex="1">
+          <mxGeometry x="675" y="-829.99" width="140" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="CN-ITaqG8iRPNj5y_a_c-3" value="Получает инфорамацию о имени, адрес?, и все остальные мета данные" style="rounded=0;whiteSpace=wrap;html=1;align=left;" parent="1" vertex="1">
+          <mxGeometry x="670" y="-1069.99" width="150" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="CN-ITaqG8iRPNj5y_a_c-7" value="" style="endArrow=none;html=1;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" parent="1" source="CAyCC45538xayjlcrZlc-43" target="CN-ITaqG8iRPNj5y_a_c-9" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="-230" y="-890" as="sourcePoint" />
+            <mxPoint x="-180" y="-920" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="CN-ITaqG8iRPNj5y_a_c-18" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" parent="1" source="CN-ITaqG8iRPNj5y_a_c-9" target="CN-ITaqG8iRPNj5y_a_c-17" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="CN-ITaqG8iRPNj5y_a_c-9" value="при mount -е главной страницы, фронт отправляет запрос в бэк, в бэке генерируем&amp;nbsp; UUID, в user.name ставим сгенерированный UUID, в user.role ставим &quot;UNAUTHORISED&quot;, отправляем UUID в cookie во фронт, в каждом запросе отправляем UUID, проверяем есть ли user.name = UUID с фронте." style="rounded=0;whiteSpace=wrap;html=1;align=left;" parent="1" vertex="1">
+          <mxGeometry x="-200" y="-988.12" width="220" height="136.25" as="geometry" />
+        </mxCell>
+        <mxCell id="CN-ITaqG8iRPNj5y_a_c-21" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" parent="1" source="CN-ITaqG8iRPNj5y_a_c-11" target="CAyCC45538xayjlcrZlc-45" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="CN-ITaqG8iRPNj5y_a_c-11" value="Отображаем политику &quot;после 30 дней данные вашего аккуратна будут обнулены, настоятельно рекомендуем зарегистрироваться для сохранений всех ваших данных !&lt;br&gt;&lt;br&gt;Инструкция:&lt;div&gt;1) нажать на кнопку профиль -я в правом верхнем углу&lt;/div&gt;&lt;div&gt;2) внести свой данные&lt;br&gt;3) поздравляем вы зарегистрированный&quot;&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="370" y="-999.99" width="240" height="160" as="geometry" />
+        </mxCell>
+        <mxCell id="CN-ITaqG8iRPNj5y_a_c-16" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="CN-ITaqG8iRPNj5y_a_c-13" target="CN-ITaqG8iRPNj5y_a_c-11" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="CN-ITaqG8iRPNj5y_a_c-13" value="Если до обнуления данных останется 7,3,1 день, показываем такую же страничку, вместо 30 дней пишем сколько дней осталось&amp;nbsp;" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;" parent="1" vertex="1">
+          <mxGeometry x="415" y="-1180" width="150" height="150" as="geometry" />
+        </mxCell>
+        <mxCell id="CN-ITaqG8iRPNj5y_a_c-20" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" parent="1" source="CN-ITaqG8iRPNj5y_a_c-17" target="CN-ITaqG8iRPNj5y_a_c-11" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="CN-ITaqG8iRPNj5y_a_c-17" value="Получает доступ к товарам, каталогом/категории, покупке (orders), корзине, избранным, КРОМЕ профиля" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="110" y="-954.99" width="165" height="70.01" as="geometry" />
+        </mxCell>
+        <mxCell id="CN-ITaqG8iRPNj5y_a_c-22" value="БАЗОВЫЙ ФЛОУ&lt;br&gt;ВЫДАЧА ПРАВ И ДОСТУПОВ" style="whiteSpace=wrap;html=1;shape=mxgraph.basic.document" parent="1" vertex="1">
+          <mxGeometry x="-425" y="-1109.99" width="100" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="CN-ITaqG8iRPNj5y_a_c-23" value="ФЛОУ ПОКУПКИ ТОВАРА" style="whiteSpace=wrap;html=1;shape=mxgraph.basic.document" parent="1" vertex="1">
+          <mxGeometry x="-420" y="-660" width="100" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="CN-ITaqG8iRPNj5y_a_c-27" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" parent="1" source="CN-ITaqG8iRPNj5y_a_c-25" target="CN-ITaqG8iRPNj5y_a_c-26" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="CN-ITaqG8iRPNj5y_a_c-25" value="Пользователь нажимает на кнопку добавить в корзину" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="-445" y="-500" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="CN-ITaqG8iRPNj5y_a_c-30" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="CN-ITaqG8iRPNj5y_a_c-26" target="CN-ITaqG8iRPNj5y_a_c-29" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="CN-ITaqG8iRPNj5y_a_c-26" value="Бэк прилетает запрос на &quot;/cart/create&quot; с body cartRequest:&lt;br&gt;productId, inventoryId, quantity.&lt;br&gt;&lt;div&gt;UserId будем из токена или из authentication объекта.&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="-250" y="-515" width="200" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="RbnlZy8a5H5zSunFJgH2-3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="CN-ITaqG8iRPNj5y_a_c-29" target="CN-ITaqG8iRPNj5y_a_c-38">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="CN-ITaqG8iRPNj5y_a_c-29" value="Далаем валидацию на: есть ли для текущего userId (authentcation) этот же product_id с этим же inventory_id" style="rhombus;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry y="-525" width="320" height="110" as="geometry" />
+        </mxCell>
+        <mxCell id="CN-ITaqG8iRPNj5y_a_c-35" value="Во фронте отображаем тостер либо красную строку где то под товаром: &quot;Товара нету в наличие&quot;&amp;nbsp;" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="590" y="-260" width="160" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="CN-ITaqG8iRPNj5y_a_c-38" value="Создаем объект cart, с полями productId, inventoryId, userId, quantity. нету&amp;nbsp;" style="rounded=0;whiteSpace=wrap;html=1;direction=north;" parent="1" vertex="1">
+          <mxGeometry x="70" y="-320" width="180" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="RbnlZy8a5H5zSunFJgH2-2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="CN-ITaqG8iRPNj5y_a_c-39" target="CN-ITaqG8iRPNj5y_a_c-29">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="CN-ITaqG8iRPNj5y_a_c-39" value="Нельзя хранить дубликаты строк одного того же user_id, product_id и inventrory_id в cart. ТАКЖЕ quantity не должен быть равен либо меньше нуля." style="ellipse;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="45" y="-660" width="230" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="RbnlZy8a5H5zSunFJgH2-1" value="В таблице inventory не могут быть дубликаты cтрок с одинаковыми значениями product_id author_id. Смысл в том что один и тот же поставщик не может дважды зарегистрироваться под товар." style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="1497" y="800" width="285" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="RbnlZy8a5H5zSunFJgH2-4" value="" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="110" y="-230" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="RbnlZy8a5H5zSunFJgH2-5" value="cart" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=20;fillColor=none;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="440" y="280" width="880" height="220" as="geometry" />
+        </mxCell>
+        <mxCell id="RbnlZy8a5H5zSunFJgH2-6" value="&lt;div style=&quot;background-color: rgb(30, 31, 34); color: rgb(188, 190, 196);&quot;&gt;&lt;pre style=&quot;font-family:&#39;JetBrains Mono&#39;,monospace;font-size:9,0pt;&quot;&gt;&lt;div style=&quot;background-color:#1e1f22;color:#bcbec4&quot;&gt;&lt;pre style=&quot;font-family:&#39;JetBrains Mono&#39;,monospace;font-size:9,0pt;&quot;&gt;&lt;span style=&quot;color:#c77dbb;&quot;&gt;id           &lt;/span&gt;&lt;span style=&quot;color:#cf8e6d;&quot;&gt;bigserial primary key&lt;/span&gt;,&lt;br&gt;&lt;span style=&quot;color:#c77dbb;&quot;&gt;quantity     &lt;/span&gt;&lt;span style=&quot;color:#cf8e6d;&quot;&gt;int default &lt;/span&gt;&lt;span style=&quot;color:#2aacb8;&quot;&gt;0&lt;/span&gt;,&lt;br&gt;&lt;span style=&quot;color:#c77dbb;&quot;&gt;inventory_id &lt;/span&gt;&lt;span style=&quot;color:#cf8e6d;&quot;&gt;bigint    not null&lt;/span&gt;,&lt;br&gt;&lt;span style=&quot;color:#c77dbb;&quot;&gt;product_id   &lt;/span&gt;&lt;span style=&quot;color:#cf8e6d;&quot;&gt;bigint    not null&lt;/span&gt;,&lt;br&gt;&lt;span style=&quot;color:#c77dbb;&quot;&gt;user_id      &lt;/span&gt;&lt;span style=&quot;color:#cf8e6d;&quot;&gt;bigint unique&lt;/span&gt;,&lt;br&gt;&lt;span style=&quot;color:#c77dbb;&quot;&gt;updated_at   &lt;/span&gt;&lt;span style=&quot;color:#cf8e6d;&quot;&gt;timestamp null&lt;/span&gt;,&lt;br&gt;&lt;span style=&quot;color:#c77dbb;&quot;&gt;deleted_at   &lt;/span&gt;&lt;span style=&quot;color:#cf8e6d;&quot;&gt;timestamp null&lt;/span&gt;,&lt;br&gt;&lt;span style=&quot;color:#cf8e6d;&quot;&gt;unique &lt;/span&gt;(&lt;span style=&quot;color:#c77dbb;&quot;&gt;user_id&lt;/span&gt;, &lt;span style=&quot;color:#c77dbb;&quot;&gt;product_id&lt;/span&gt;), &lt;span style=&quot;color:#7a7e85;&quot;&gt;--таблицы не может содержать дубликаты одного того же user -а на один и тот же товар,&lt;br&gt;&lt;/span&gt;&lt;span style=&quot;color:#7a7e85;&quot;&gt;-- вместо этого значение quantity должно&lt;br&gt;&lt;/span&gt;&lt;span style=&quot;color:#cf8e6d;&quot;&gt;foreign key &lt;/span&gt;(&lt;span style=&quot;color:#c77dbb;&quot;&gt;inventory_id&lt;/span&gt;) &lt;span style=&quot;color:#cf8e6d;&quot;&gt;references &lt;/span&gt;inventory (&lt;span style=&quot;color:#c77dbb;&quot;&gt;id&lt;/span&gt;), &lt;span style=&quot;color:#7a7e85;&quot;&gt;--Через join будем брать сам мета информацию продукта и конкретного поставщика&lt;br&gt;&lt;/span&gt;&lt;span style=&quot;color:#cf8e6d;&quot;&gt;foreign key &lt;/span&gt;(&lt;span style=&quot;color:#c77dbb;&quot;&gt;user_id&lt;/span&gt;) &lt;span style=&quot;color:#cf8e6d;&quot;&gt;references &lt;/span&gt;users (&lt;span style=&quot;color:#c77dbb;&quot;&gt;id&lt;/span&gt;),&lt;br&gt;&lt;span style=&quot;color:#cf8e6d;&quot;&gt;foreign key &lt;/span&gt;(&lt;span style=&quot;color:#c77dbb;&quot;&gt;product_id&lt;/span&gt;) &lt;span style=&quot;color:#cf8e6d;&quot;&gt;references &lt;/span&gt;products (&lt;span style=&quot;color:#c77dbb;&quot;&gt;id&lt;/span&gt;)&lt;br&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/pre&gt;&lt;/div&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="RbnlZy8a5H5zSunFJgH2-5">
+          <mxGeometry y="20" width="880" height="200" as="geometry" />
+        </mxCell>
+        <mxCell id="RbnlZy8a5H5zSunFJgH2-9" value="" style="endArrow=none;html=1;rounded=0;entryX=0.467;entryY=1.006;entryDx=0;entryDy=0;entryPerimeter=0;exitX=0.5;exitY=0;exitDx=0;exitDy=0;" edge="1" parent="1" source="n48tOo-S1rUGBAmjSHUs-1" target="RbnlZy8a5H5zSunFJgH2-6">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="830" y="550" as="sourcePoint" />
+            <mxPoint x="880" y="500" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="RbnlZy8a5H5zSunFJgH2-10" value="" style="endArrow=none;html=1;rounded=0;entryX=0.697;entryY=1.003;entryDx=0;entryDy=0;entryPerimeter=0;exitX=0.001;exitY=0.139;exitDx=0;exitDy=0;exitPerimeter=0;" edge="1" parent="1" source="CAyCC45538xayjlcrZlc-2" target="RbnlZy8a5H5zSunFJgH2-6">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="1060" y="830" as="sourcePoint" />
+            <mxPoint x="1110" y="780" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="1050" y="950" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="RbnlZy8a5H5zSunFJgH2-11" value="&lt;br&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="RbnlZy8a5H5zSunFJgH2-10">
+          <mxGeometry x="0.9005" y="-1" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

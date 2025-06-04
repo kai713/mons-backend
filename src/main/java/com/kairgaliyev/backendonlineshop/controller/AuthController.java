@@ -6,7 +6,6 @@ import com.kairgaliyev.backendonlineshop.dto.UserRequest;
 import com.kairgaliyev.backendonlineshop.service.intreface.IRefreshTokenService;
 import com.kairgaliyev.backendonlineshop.service.intreface.IUserService;
 import com.kairgaliyev.backendonlineshop.utils.JWTService;
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;

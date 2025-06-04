@@ -55,22 +55,32 @@ create table if not exists inventory
     foreign key (author_id) references users (id)
 );
 
+-- хранить текущий сеанс товаров в корзине, после удаляем при order -е
 create table if not exists cart
 (
     id           bigserial primary key,
     quantity     int default 0,
     inventory_id bigint    not null,
-    product_id   bigint    not null,
-    user_id      bigint unique,
+    product_id   bigint    not null,                                 --своего рода изначальная декомпозиция, цель такой ссылки,
+    -- быстрый доступ с одним join нежели чем с двумя join -ами (join inventory join products)
+    user_id      bigint,
+    created_at   timestamp default now(), -- мб эти три колонки пригодятся
     updated_at   timestamp null,
-    deleted_at   timestamp null,
-    foreign key (inventory_id) references inventory (id), --Через join будем брать сам мета информацию продукта и конкретного поставщика
+    deleted_at   timestamp null,                                     --если будем делать hard_delete, то оставляем логику с unique constraint,
+    -- если нет ТО убираем constraint и оставляем в бд как архив (как такового смысла не делать hard delete - не вижу)
+    foreign key (inventory_id) references inventory (id),            --Через join будем брать саму мета информацию продукта
+    -- и конкретного поставщика
     foreign key (user_id) references users (id),
-    foreign key (product_id) references products (id)
+    foreign key (product_id) references products (id),
+    constraint user_cart unique (product_id, user_id, inventory_id), -- таблица не может иметь дубликат product_id, user_id, inventory_id,
+-- вместо дублирования будем делать увелечения значения quantity;
+    constraint positive_quantity check (quantity >= 0)
 );
 
 create sequence if not exists orders_seq increment by 10;
 
+--Используем в качестве архива если статус DELIVERED + current_timestamp > created_at + interval '1 month',
+-- все остальные отображаем в страничке заказов, unique constraint -а НЕТУ потому что заказы могут дублироваться
 create table if not exists orders
 (
     id           bigint       not null unique default nextval('orders_seq'),
@@ -89,6 +99,7 @@ create table if not exists refresh_token
     id          bigserial primary key,
     token       varchar(255) not null,
     user_id     bigint       not null,
-    expiry_date timestamp with time zone,
-    foreign key (user_id) references users (id)
+    expiry_date timestamp with time zone, --один user один refresh_token
+    constraint owner unique (re)
+        foreign key (user_id) references users (id)
 )
