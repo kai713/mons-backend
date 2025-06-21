@@ -20,62 +20,61 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.UUID;
 
 @Component
 @RequiredArgsConstructor
 public class JWTAuthFilter extends OncePerRequestFilter {
+
     private final JWTService jwtService;
     private final CustomUserDetailsService customUserDetailsService;
     private final UserRepository userRepository;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
-                                    FilterChain filterChain) throws ServletException, IOException {
+                                    FilterChain filterChain)
+            throws ServletException, IOException {
+
         final String authHeader = request.getHeader("Authorization");
-        final String jwtToken;
-        final String userEmail;
-        final Long userId;
 
-        if (authHeader == null || authHeader.isBlank() || !authHeader.startsWith("Bearer ")) {
-            filterChain.doFilter(request, response);
-            return;
+        if (authHeader != null && authHeader.startsWith("Bearer ")) {
+            String jwtToken = authHeader.substring(7);
+            String userEmail = jwtService.extractUsername(jwtToken);
+            Long userId = jwtService.extractUserId(jwtToken);
+
+            if (userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+                UserDetails userDetails = customUserDetailsService.loadUserByUsername(userEmail);
+                if (jwtService.isValidToken(jwtToken, userDetails)) {
+                    UsernamePasswordAuthenticationToken token =
+                            new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+                    token.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+
+                    SecurityContext context = SecurityContextHolder.createEmptyContext();
+                    context.setAuthentication(token);
+                    SecurityContextHolder.setContext(context);
+
+                    request.setAttribute("userId", userId);
+                    filterChain.doFilter(request, response);
+                    return; // Авторизован — больше ничего не нужно
+                }
+            }
         }
 
-        jwtToken = authHeader.substring(7);
-        userEmail = jwtService.extractUsername(jwtToken);
-        userId = jwtService.extractUserId(jwtToken);
+        // Если не авторизован или токен невалиден — fallback на anonymous guest
+        String uuid = getUuidFromCookies(request);
 
-        if (userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-            UserDetails userDetails = customUserDetailsService.loadUserByUsername(userEmail);
-            if (jwtService.isValidToken(jwtToken, userDetails)) {
-                UsernamePasswordAuthenticationToken token =
-                        new UsernamePasswordAuthenticationToken(userDetails, null,
-                                userDetails.getAuthorities());
-                token.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-
-                // Устанавливаем контекст безопасности
-                SecurityContext securityContext = SecurityContextHolder.createEmptyContext();
-                securityContext.setAuthentication(token);
-                SecurityContextHolder.setContext(securityContext);
-
-                // Можно также добавить userId в атрибуты запроса, если это понадобится в контроллерах
-                request.setAttribute("userId", userId);
-            }
+        if (uuid != null) {
+            userRepository.findByName(uuid).ifPresentOrElse(
+                    user -> setSpringSecurityContext(new CustomUserDetails(user), request),
+                    () -> createGuest(uuid, response, request)
+            );
         } else {
-            String uuid = getUuidFromCookies(request);
-            if (uuid != null) {
-                userRepository.findByName(uuid).ifPresentOrElse(
-                        user -> setSpringSecurityContext(new CustomUserDetails(user), request),
-                        () -> createGuest(uuid, response, request)
-                );
-
-            } else {
-                String newUuid = UUID.randomUUID().toString();
-                createGuest(newUuid, response, request);
-            }
+            String newUuid = UUID.randomUUID().toString();
+            createGuest(newUuid, response, request);
         }
+
         filterChain.doFilter(request, response);
     }
 
@@ -92,19 +91,21 @@ public class JWTAuthFilter extends OncePerRequestFilter {
         UserEntity guest = new UserEntity();
         guest.setName(uuid);
         guest.setRole(UserRole.UNAUTHORIZED);
+        guest.setCreatedAt(LocalDateTime.now());
         userRepository.save(guest);
+
         setSpringSecurityContext(new CustomUserDetails(guest), request);
 
         Cookie cookie = new Cookie("UUID", uuid);
         cookie.setHttpOnly(true);
         cookie.setPath("/");
-        cookie.setMaxAge(60 * 60 * 24 * 30);
+        cookie.setMaxAge(60 * 60 * 24 * 30); // 30 дней
         response.addCookie(cookie);
     }
 
     private void setSpringSecurityContext(UserDetails user, HttpServletRequest request) {
-        UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(
-                user, null, user.getAuthorities());
+        UsernamePasswordAuthenticationToken token =
+                new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
         token.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 
         SecurityContext context = SecurityContextHolder.createEmptyContext();
@@ -112,4 +113,3 @@ public class JWTAuthFilter extends OncePerRequestFilter {
         SecurityContextHolder.setContext(context);
     }
 }
-

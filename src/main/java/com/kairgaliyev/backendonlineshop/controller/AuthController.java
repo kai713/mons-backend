@@ -5,6 +5,7 @@ import com.kairgaliyev.backendonlineshop.dto.LoginRequest;
 import com.kairgaliyev.backendonlineshop.dto.UserRequest;
 import com.kairgaliyev.backendonlineshop.service.intreface.IRefreshTokenService;
 import com.kairgaliyev.backendonlineshop.service.intreface.IUserService;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -17,7 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/v1/auth")
+@RequestMapping("/api/v1/auth")
 @RequiredArgsConstructor
 @Slf4j
 public class AuthController {
@@ -27,10 +28,24 @@ public class AuthController {
 
     //TODO UserRequest
     @PostMapping("/register")
-    public ResponseEntity<UserRequest> register(@RequestBody UserRequest user, HttpServletRequest request) {
+    public ResponseEntity<UserRequest> register(@RequestBody UserRequest user, HttpServletRequest request, HttpServletResponse response) {
         log.info("Registering user: {}, userId: {}", user, request.getAttribute("userId"));
-        UserRequest response = userService.register(user);
-        return ResponseEntity.ok().body(response);
+        Cookie cookie = null;
+        try {
+            cookie = new Cookie(request.getCookies()[0].getName(), request.getCookies()[0].getValue());
+        } catch (Exception e) {
+            log.info("Error while registering user: {}", e.getMessage());
+        }
+        UserRequest userRequest = userService.register(user, cookie);
+        ResponseCookie clearUUID = ResponseCookie.from("UUID", "")
+                .httpOnly(true)
+                .secure(true)
+                .sameSite("Strict")
+                .path("/")
+                .maxAge(0)
+                .build();
+        response.addHeader(HttpHeaders.SET_COOKIE, clearUUID.toString());
+        return ResponseEntity.ok().body(userRequest);
     }
 
     @PostMapping("/login")

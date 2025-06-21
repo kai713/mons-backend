@@ -24,7 +24,8 @@ public abstract class UserMapper {
             target = "password",
             expression = "java(passwordEncoder.encode(request.password()))"
     )
-    @Mapping(target = "role", defaultValue = "USER")
+    @Mapping(target = "role", expression = "java(com.kairgaliyev.backendonlineshop.enums.UserRole.USER)")
+    @Mapping(target = "id", ignore = true)
     public abstract UserEntity toNewUserEntity(UserRequest request);
 
     public abstract UserRequest toUserRequest(UserEntity entity);

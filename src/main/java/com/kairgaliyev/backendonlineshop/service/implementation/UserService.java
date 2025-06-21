@@ -10,6 +10,8 @@ import com.kairgaliyev.backendonlineshop.exception.BadRequestException;
 import com.kairgaliyev.backendonlineshop.repository.UserRepository;
 import com.kairgaliyev.backendonlineshop.service.intreface.IUserService;
 import com.kairgaliyev.backendonlineshop.utils.JWTService;
+import jakarta.servlet.http.Cookie;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -29,15 +31,28 @@ public class UserService implements IUserService {
     private final UserMapper userMapper;
 
     @Override
-    public UserRequest register(UserRequest user) {
-        if (userRepository.findByEmail(user.email()).isPresent()) {
+    @Transactional
+    public UserRequest register(UserRequest userRequest, Cookie cookie) {
+        if (userRepository.findByEmail(userRequest.email()).isPresent()) {
             throw new BadRequestException("User already exists in system", "error.bad_request");
         }
+        String anonymousId = null;
+        if (cookie != null) {
+            anonymousId = cookie.getValue();
+        }
+        if (anonymousId != null) {
+            UserEntity anonymousUserEntity = userRepository.findByName(anonymousId)
+                    .orElseThrow(
+                            () -> new BadRequestException("user has UUID which one is not valid", "error.bad_request"));
+            UserEntity userEntity = userMapper.toNewUserEntity(userRequest);
+            userEntity.setId(anonymousUserEntity.getId());
+            userEntity = userRepository.save(userEntity);
+            return userMapper.toUserRequest(userEntity);
+        }
 
-        UserEntity userEntity = userMapper.toNewUserEntity(user);
+        UserEntity userEntity = userMapper.toNewUserEntity(userRequest);
         userEntity = userRepository.save(userEntity);
-        UserRequest userRequest = userMapper.toUserRequest(userEntity);
-        return userRequest;
+        return userMapper.toUserRequest(userEntity);
     }
 
     @Override
