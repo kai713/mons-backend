@@ -5,7 +5,6 @@ import com.kairgaliyev.backendonlineshop.dto.LoginRequest;
 import com.kairgaliyev.backendonlineshop.dto.UserRequest;
 import com.kairgaliyev.backendonlineshop.service.intreface.IRefreshTokenService;
 import com.kairgaliyev.backendonlineshop.service.intreface.IUserService;
-import com.kairgaliyev.backendonlineshop.utils.JWTService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +14,8 @@ import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.UUID;
+
 @RestController
 @RequestMapping("/v1/auth")
 @RequiredArgsConstructor
@@ -23,7 +24,6 @@ public class AuthController {
 
     private final IUserService userService;
     private final IRefreshTokenService refreshTokenService;
-    private final JWTService jwtService;
 
     //TODO UserRequest
     @PostMapping("/register")
@@ -76,9 +76,13 @@ public class AuthController {
                 .path("/")
                 .maxAge(0)
                 .build();
-
         response.addHeader("Set-Cookie", refreshCookie.toString());
 
         return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/unauthorized")
+    public ResponseEntity<UUID> unauthorized() {
+        return null;
     }
 }

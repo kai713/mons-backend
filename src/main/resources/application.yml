@@ -1,6 +1,7 @@
 spring:
   application:
-    name: BackendOnlineShop
+    version: 1.0.0
+    name: MONS-backend
 
   datasource:
     url: jdbc:postgresql://localhost:5433/ONS-postgres

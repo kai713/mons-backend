@@ -67,7 +67,7 @@ create table if not exists cart
     created_at   timestamp default now(), -- мб эти три колонки пригодятся
     updated_at   timestamp null,
     deleted_at   timestamp null,                                     --если будем делать hard_delete, то оставляем логику с unique constraint,
-    -- если нет ТО убираем constraint и оставляем в бд как архив (как такового смысла не делать hard delete - не вижу)
+    -- если нет - убираем constraint и оставляем в бд как архив (как такового смысла не делать hard delete - не вижу)
     foreign key (inventory_id) references inventory (id),            --Через join будем брать саму мета информацию продукта
     -- и конкретного поставщика
     foreign key (user_id) references users (id),
@@ -100,6 +100,6 @@ create table if not exists refresh_token
     token       varchar(255) not null,
     user_id     bigint       not null,
     expiry_date timestamp with time zone, --один user один refresh_token
-    constraint owner unique (re)
-        foreign key (user_id) references users (id)
+    constraint owner unique (user_id),
+    foreign key (user_id) references users (id)
 )

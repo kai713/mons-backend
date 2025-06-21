@@ -17,6 +17,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.util.UUID;
+
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -60,5 +62,10 @@ public class UserService implements IUserService {
         UserDto userDto = userMapper.toUserDto(user);
 
         return userDto;
+    }
+
+    public UUID unauthorizedUserUUID() {
+        UserEntity unauthorizedUserEntity = new UserEntity();
+        return null;
     }
 }
