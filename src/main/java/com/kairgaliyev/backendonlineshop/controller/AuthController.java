@@ -15,8 +15,6 @@ import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.UUID;
-
 @RestController
 @RequestMapping("/api/v1/auth")
 @RequiredArgsConstructor
@@ -29,7 +27,6 @@ public class AuthController {
     //TODO UserRequest
     @PostMapping("/register")
     public ResponseEntity<UserRequest> register(@RequestBody UserRequest user, HttpServletRequest request, HttpServletResponse response) {
-        log.info("Registering user: {}, userId: {}", user, request.getAttribute("userId"));
         Cookie cookie = null;
         try {
             cookie = new Cookie(request.getCookies()[0].getName(), request.getCookies()[0].getValue());
@@ -37,14 +34,7 @@ public class AuthController {
             log.info("Error while registering user: {}", e.getMessage());
         }
         UserRequest userRequest = userService.register(user, cookie);
-        ResponseCookie clearUUID = ResponseCookie.from("UUID", "")
-                .httpOnly(true)
-                .secure(true)
-                .sameSite("Strict")
-                .path("/")
-                .maxAge(0)
-                .build();
-        response.addHeader(HttpHeaders.SET_COOKIE, clearUUID.toString());
+        clearCookieValue("UUID", response);
         return ResponseEntity.ok().body(userRequest);
     }
 
@@ -83,21 +73,19 @@ public class AuthController {
         log.info("Logging out user: {}", request.getAttribute("userId"));
 
         refreshTokenService.invalidateRefreshToken(request);
+        clearCookieValue("refreshToken", response);
 
-        ResponseCookie refreshCookie = ResponseCookie.from("refreshToken", "")
+        return ResponseEntity.ok().build();
+    }
+
+    private void clearCookieValue(String cookieName, HttpServletResponse response) {
+        ResponseCookie cookie = ResponseCookie.from(cookieName, "")
                 .httpOnly(true)
                 .secure(true)
                 .sameSite("Strict")
                 .path("/")
                 .maxAge(0)
                 .build();
-        response.addHeader("Set-Cookie", refreshCookie.toString());
-
-        return ResponseEntity.ok().build();
-    }
-
-    @PostMapping("/unauthorized")
-    public ResponseEntity<UUID> unauthorized() {
-        return null;
+        response.addHeader(HttpHeaders.SET_COOKIE, cookie.toString());
     }
 }
