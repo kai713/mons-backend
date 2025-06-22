@@ -45,6 +45,7 @@ public class JWTAuthFilter extends OncePerRequestFilter {
                 String jwtToken = authHeader.substring(7);
                 String userEmail = jwtService.extractUsername(jwtToken);
                 Long userId = jwtService.extractUserId(jwtToken);
+                String role = jwtService.extractRole(jwtToken);
 
                 if (userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null) {
                     UserDetails userDetails = customUserDetailsService.loadUserByUsername(userEmail);
@@ -58,6 +59,7 @@ public class JWTAuthFilter extends OncePerRequestFilter {
                         SecurityContextHolder.setContext(context);
 
                         request.setAttribute("userId", userId);
+                        request.setAttribute("role", role);
                         filterChain.doFilter(request, response);
                         return; // Авторизован — больше ничего не нужно
                     }

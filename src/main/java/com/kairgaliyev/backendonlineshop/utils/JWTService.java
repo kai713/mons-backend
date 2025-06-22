@@ -32,6 +32,7 @@ public class JWTService {
         return Jwts.builder()
                 .subject(user.getEmail())
                 .claim("userId", user.getId())
+                .claim("role", user.getRole())
                 .issuedAt(new Date(System.currentTimeMillis()))
                 .expiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
                 .signWith(key)
@@ -44,6 +45,10 @@ public class JWTService {
 
     public Long extractUserId(String token) {
         return extractClaims(token, claims -> claims.get("userId", Long.class));
+    }
+
+    public String extractRole(String token) {
+        return extractClaims(token, claims -> claims.get("role", String.class));
     }
 
     private <T> T extractClaims(String token, Function<Claims, T> claimsTFunction) {
