@@ -28,7 +28,7 @@ services:
       - ./volumes/postgres/data:/var/lib/postgresql
       - ./volumes/postgres/logs:/logs
     ports:
-      - 5433:5432
+      - "5433:5432"
 
   redis-insight:
     image: redis/redisinsight:2.68
