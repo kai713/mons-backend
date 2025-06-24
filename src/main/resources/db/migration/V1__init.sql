@@ -42,15 +42,16 @@ create table if not exists products
 --вторая строка в таблице имеет author_id 1 и product_id 1 <- ошибка, один авторам может иметь разное product_id, нельзя дублировать product_id для конкретного author_id
 create table if not exists inventory
 (
-    id         bigserial primary key,
-    product_id bigint       not null,
-    broker     varchar(255) not null,        --названия брокер/поставщик товара/компания
-    author_id  bigint       not null unique, --deliver id, unique для того чтобы
-    quantity   int          not null,
-    price      double precision default 0,
-    created_at timestamp        default now(),
-    updated_at timestamp,
-    deleted_at timestamp,
+    id          bigserial primary key,
+    product_id  bigint       not null,
+    broker      varchar(255) not null,        --названия брокер/поставщик товара/компания
+    broker_type varchar(255) null,            --тип брокера, на будущее ONS-62
+    author_id   bigint       not null unique, --deliver id, unique для того чтобы
+    quantity    int          not null,
+    price       double precision default 0,
+    created_at  timestamp        default now(),
+    updated_at  timestamp,
+    deleted_at  timestamp,
     foreign key (product_id) references products (id),
     foreign key (author_id) references users (id)
 );
@@ -59,12 +60,12 @@ create table if not exists inventory
 create table if not exists cart
 (
     id           bigserial primary key,
-    quantity     int default 0,
+    quantity     int       default 0,
     inventory_id bigint    not null,
     product_id   bigint    not null,                                 --своего рода изначальная декомпозиция, цель такой ссылки,
     -- быстрый доступ с одним join нежели чем с двумя join -ами (join inventory join products)
     user_id      bigint,
-    created_at   timestamp default now(), -- мб эти три колонки пригодятся
+    created_at   timestamp default now(),                            -- мб эти три колонки пригодятся
     updated_at   timestamp null,
     deleted_at   timestamp null,                                     --если будем делать hard_delete, то оставляем логику с unique constraint,
     -- если нет - убираем constraint и оставляем в бд как архив (как такового смысла не делать hard delete - не вижу)
@@ -81,17 +82,21 @@ create sequence if not exists orders_seq increment by 10;
 
 --Используем в качестве архива если статус DELIVERED + current_timestamp > created_at + interval '1 month',
 -- все остальные отображаем в страничке заказов, unique constraint -а НЕТУ потому что заказы могут дублироваться
-create table if not exists orders
+create table if not exists orders -- order, разные product_id - разные order -ы
 (
     id           bigint       not null unique default nextval('orders_seq'),
     product_id   bigint       not null,
+    inventory_id bigint       not null,
     quantity     int                          default 0,
+    price        int          not null        default 0, --Цены в inventory меняется, тк как брокер может понизить цену на товар,
+    -- нам же в свою очередь надо показывать цену на момент покупки
     order_status varchar(200) null,
     created_at   timestamp                    default now(),
     updated_at   timestamp    null,
     user_id      bigint,
     foreign key (product_id) references products (id),
-    foreign key (user_id) references users (id)
+    foreign key (user_id) references users (id),
+    foreign key (inventory_id) references inventory (id)
 );
 
 create table if not exists refresh_token
